@@ -1,10 +1,10 @@
 #!/bin/bash
-_PREFIX=mpp
+_PREFIX=maquina-sencilla
 CORE_CONTAINER_NAME="${_PREFIX}-core"
 FRONT_CONTAINER_NAME="${_PREFIX}-front"
 docker build -t $CORE_CONTAINER_NAME -f Dockerfile.build.core .
 
-docker cp $(docker create --rm $CORE_CONTAINER_NAME):/mpp-cpu/output/. $FRONT_CONTAINER_NAME/src/lib/core/files
+docker cp $(docker create --rm $CORE_CONTAINER_NAME):/cpu/output/. $FRONT_CONTAINER_NAME/src/lib/core/files
 
 docker rmi $(docker images "$CORE_CONTAINER_NAME" -a -q) -f
 

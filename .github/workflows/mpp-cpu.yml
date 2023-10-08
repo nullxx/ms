@@ -1,4 +1,4 @@
-name: mpp-cpu
+name: cpu
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  mpp-cpu_test:
+  cpu_test:
 
     runs-on: ubuntu-latest
 
@@ -17,7 +17,7 @@ jobs:
           submodules: 'true'
     - name: Compile tests
       run: RUNTEST=1 make compile-tests
-      working-directory: mpp-cpu
+      working-directory: cpu
     - name: Run tests
       run: make run-tests
-      working-directory: mpp-cpu
+      working-directory: cpu

@@ -9,8 +9,8 @@ make
 ```
 
 This will generate the following files in output/
-- libmpp.js
-- libmpp.wasm
+- libMaquinaSencilla.js
+- libMaquinaSencilla.wasm
 
 
 ## TESTING

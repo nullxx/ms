@@ -46,7 +46,7 @@ ifeq ($(DEBUG), 1)
     CFLAGS +=-DDEBUG
 endif
 
-MAIN	:= libmpp.js
+MAIN	:= libMaquinaSencilla.js
 
 SOURCEDIRS	:= $(shell find $(SRC) -type d)
 FIXPATH = $1

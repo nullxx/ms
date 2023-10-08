@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug mpp-cpu",
+      "name": "Debug cpu",
       "type": "lldb",
       "request": "launch",
       "args": [],
@@ -25,7 +25,7 @@
         "miDebuggerPath": "gdb.exe",
         "program": "${workspaceFolder}/output/main.exe"
       },
-      "preLaunchTask": "build mpp-cpu"
+      "preLaunchTask": "build cpu"
     },
     {
       "name": "Run tests",

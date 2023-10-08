@@ -1,8 +1,8 @@
 FROM emscripten/emsdk:latest AS core-build
 
-RUN mkdir -p /mpp-cpu
-WORKDIR /mpp-cpu
+RUN mkdir -p /cpu
+WORKDIR /cpu
 
-COPY mpp-cpu .
+COPY cpu .
 
 RUN make
