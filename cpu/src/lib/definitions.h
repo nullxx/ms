@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/definitions.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Friday, 15th April 2022 11:32:56 am
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----
@@ -11,9 +11,9 @@
 #ifndef definitions_h
 #define definitions_h
 #define WORD_SIZE_BIT 32
-
+#include <stdint.h>
 typedef struct {
-    int bits[WORD_SIZE_BIT];
+    uint8_t bits[WORD_SIZE_BIT];
 } Word;
 
 int word_to_int(Word bw);

@@ -1,6 +1,6 @@
 //
 //  mem.h
-//  mpp-cpu
+//  cpu
 //
 //  Created by Jon Lara trigo on 21/3/22.
 //

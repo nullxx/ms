@@ -1,6 +1,6 @@
 //
 //  mem.c
-//  mpp-cpu
+//  cpu
 //
 //  Created by Jon Lara trigo on 21/3/22.
 //
@@ -22,11 +22,11 @@ static const int mem_size = MEM_SIZE_KB * 1024 * 8 / MEM_VALUE_SIZE_BITS;
 
 static Mem mem;
 
-static Bus_t *last_bus_data = NULL;
+static Bus_t *last_alu_output_data = NULL;
 static Bus_t *last_bus_dir = NULL;
 static Bus_t *control_bus = NULL;
 
-static PubSubSubscription *bus_data_subscription = NULL;
+static PubSubSubscription *bus_alu_output_subscription = NULL;
 static PubSubSubscription *bus_dir_subscription = NULL;
 static PubSubSubscription *control_bus_topic_subscription = NULL;
 
@@ -53,22 +53,23 @@ static void unfill_memory(void) { free(mem.values); }
 
 void init_mem(void) {
     fill_memory();
-    last_bus_data = create_bus_data();
+    last_alu_output_data = create_bus_data();
     last_bus_dir = create_bus_data();
     control_bus = create_bus_data();
-    bus_data_subscription = subscribe_to(DATA_BUS_TOPIC, last_bus_data);
-    bus_dir_subscription = subscribe_to(DIR_BUS_TOPIC_2, last_bus_dir);
+
+    bus_alu_output_subscription = subscribe_to(ALU_OUTPUT_BUS_TOPIC, last_alu_output_data);
+    bus_dir_subscription = subscribe_to(DIR_BUS_TOPIC_1, last_bus_dir);
     control_bus_topic_subscription = subscribe_to(CONTROL_BUS_TOPIC, control_bus);
 }
 
 void shutdown_mem(void) {
     unfill_memory();
 
-    unsubscribe_for(bus_data_subscription);
+    unsubscribe_for(bus_alu_output_subscription);
     unsubscribe_for(bus_dir_subscription);
     unsubscribe_for(control_bus_topic_subscription);
 
-    destroy_bus_data(last_bus_data);
+    destroy_bus_data(last_alu_output_data);
     destroy_bus_data(last_bus_dir);
     destroy_bus_data(control_bus);
 }
@@ -103,24 +104,20 @@ static MemValue *get_mem_value(int offset) {
 }
 
 void run_mem(void) {
-    update_bus_data(last_bus_data);
+    update_bus_data(last_alu_output_data);
     update_bus_data(last_bus_dir);
     update_bus_data(control_bus);
 
     Error err;
-    int dir_bin = word_to_int(last_bus_dir->next_value);
+    int dir_bin = word_to_int(last_bus_dir->current_value);
 
-    Word l_e_lb;
-    Word mem_bus_lb;
-    initialize_word(&l_e_lb, 0);
-    initialize_word(&mem_bus_lb, 0);
+    Word w_r_lb;
+    initialize_word(&w_r_lb, 0);
 
-    l_e_lb.bits[0] = control_bus->current_value.bits[CONTROL_BUS_LE_BIT_POSITION];
+    w_r_lb.bits[0] = control_bus->current_value.bits[CONTROL_BUS_WR_BIT_POSITION];
 
-    mem_bus_lb.bits[0] = control_bus->current_value.bits[CONTROL_BUS_MEMBUS_BIT_POSITION];
-
-    switch (word_to_int(l_e_lb)) {
-        case 1: {
+    switch (word_to_int(w_r_lb)) {
+        case 0: {
             MemValue *mem_value = get_mem_value(dir_bin);
             if (mem_value == NULL) {
                 err.message = "Could not get value from memory";
@@ -129,13 +126,13 @@ void run_mem(void) {
                 goto error;
             }
 
-            // if memBus ==> send data to the bus
-            if (word_to_int(mem_bus_lb) == 1) publish_message_to(DATA_BUS_TOPIC, int_to_word(mem_value->value));
+            // send data to the bus
+            publish_message_to(DATA_BUS_TOPIC, int_to_word(mem_value->value));
             break;
         }
-        case 0: {
-            // use the last value of DATA_BUS
-            MemValue mem_value = {.offset = dir_bin, .value = word_to_int(last_bus_data->next_value)};
+        case 1: {
+            // use the last value of output from alu
+            MemValue mem_value = {.offset = dir_bin, .value = word_to_int(last_alu_output_data->next_value)};
             int success = set_mem_value(mem_value);
             if (!success) {
                 err.message = "Could not set value in memory";
@@ -146,6 +143,7 @@ void run_mem(void) {
 
             break;
         }
+
         default:
             break;
     }

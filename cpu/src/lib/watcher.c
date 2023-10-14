@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/watcher.c
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Thursday, 7th April 2022 4:24:11 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/watcher.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Thursday, 7th April 2022 4:24:29 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----
@@ -13,21 +13,13 @@
 #include "components/components.h"
 
 typedef enum {
-    WATCHER_TYPE_ACUM,
-    WATCHER_TYPE_FC,
     WATCHER_TYPE_FZ,
-    WATCHER_TYPE_B,
-    WATCHER_TYPE_C,
-    WATCHER_TYPE_D,
-    WATCHER_TYPE_E,
-    WATCHER_TYPE_H,
-    WATCHER_TYPE_L,
-    WATCHER_TYPE_2OP,
-    WATCHER_TYPE_PCH,
-    WATCHER_TYPE_PCL,
     WATCHER_TYPE_PC,
-    WATCHER_TYPE_SP,
-    WATCHER_TYPE_RI
+    WATCHER_TYPE_RI_C0,
+    WATCHER_TYPE_RI_F,
+    WATCHER_TYPE_RI_D,
+    WATCHER_TYPE_ALU_RA,
+    WATCHER_TYPE_ALU_RB,
 } WatcherType;
 
 typedef struct {

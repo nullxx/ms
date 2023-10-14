@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/electronic/and.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Monday, 18th April 2022 7:12:50 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

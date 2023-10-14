@@ -1,6 +1,6 @@
 /*
  * File: /src/linker/registers.c
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Friday, 22nd April 2022 5:18:42 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----
@@ -17,85 +17,112 @@
 #include "../lib/pubsub.h"
 #include "linker.h"
 
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-int get_register_acum(void) { return word_to_int(get_register(WATCHER_TYPE_ACUM)->value); }
+static Bus_t *fz_bus = NULL;
+static PubSubSubscription *fz_subscription = NULL;
+
+void init_linker_registers(void)
+{
+    fz_bus = create_bus_data();
+    fz_subscription = subscribe_to(ALU_FZ_OUTPUT_BUS_TOPIC, fz_bus);
+}
+
+void shutdown_linker_registers(void)
+{
+    unsubscribe_for(fz_subscription);
+    destroy_bus_data(fz_bus);
+}
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_register_fc(void) { return word_to_int(get_register(WATCHER_TYPE_FC)->value); }
+int get_register_fz(void)
+{
+    return fz_bus->next_value.bits[0];
+}
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_register_fz(void) { return word_to_int(get_register(WATCHER_TYPE_FZ)->value); }
+int get_register_ri_C0(void)
+{
+    return word_to_int(get_register(WATCHER_TYPE_RI_C0)->value);
+}
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_register_b(void) { return word_to_int(get_register(WATCHER_TYPE_B)->value); }
+int get_register_ri_F(void)
+{
+    return word_to_int(get_register(WATCHER_TYPE_RI_F)->value);
+}
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_register_c(void) { return word_to_int(get_register(WATCHER_TYPE_C)->value); }
+int get_register_ri_D(void)
+{
+    return word_to_int(get_register(WATCHER_TYPE_RI_D)->value);
+}
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_register_d(void) { return word_to_int(get_register(WATCHER_TYPE_D)->value); }
+int get_register_ri(void)
+{
+    Word ri;
+    initialize_word(&ri, 0);
+
+    Word ri_d = get_register(WATCHER_TYPE_RI_D)->value;
+    Word ri_f = get_register(WATCHER_TYPE_RI_F)->value;
+    Word ri_c0 = get_register(WATCHER_TYPE_RI_C0)->value;
+
+    for (int i = 0; i < 7; i++)
+    {
+        ri.bits[i] = ri_d.bits[i];
+    }
+
+    for (int i = 0; i < 7; i++)
+    {
+        ri.bits[i + 7] = ri_f.bits[i];
+    }
+
+    for (int i = 0; i < 2; i++)
+    {
+        ri.bits[i + 14] = ri_c0.bits[i];
+    }
+
+    return word_to_int(ri);
+}
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_register_e(void) { return word_to_int(get_register(WATCHER_TYPE_E)->value); }
+int get_register_pc(void)
+{
+    return word_to_int(get_register(WATCHER_TYPE_PC)->value);
+}
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_register_h(void) { return word_to_int(get_register(WATCHER_TYPE_H)->value); }
+int get_register_alu_ra(void)
+{
+    return word_to_int(get_register(WATCHER_TYPE_ALU_RA)->value);
+}
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_register_l(void) { return word_to_int(get_register(WATCHER_TYPE_L)->value); }
+int get_register_alu_rb(void)
+{
+    return word_to_int(get_register(WATCHER_TYPE_ALU_RB)->value);
+}
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_register_2op(void) { return word_to_int(get_register(WATCHER_TYPE_2OP)->value); }
-
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-int get_register_pch(void) { return word_to_int(get_register(WATCHER_TYPE_PCH)->value); }
-
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-int get_register_pcl(void) { return word_to_int(get_register(WATCHER_TYPE_PCL)->value); }
-
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-int get_register_pc(void) { return word_to_int(get_register(WATCHER_TYPE_PC)->value); }
-
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-int get_register_sp(void) { return word_to_int(get_register(WATCHER_TYPE_SP)->value); }
-
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-int get_register_ri(void) { return word_to_int(get_register(WATCHER_TYPE_RI)->value); }
-
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-void set_register_pc(int value) {
+void set_register_pc(int value)
+{
     get_register(WATCHER_TYPE_PC)->value = int_to_word(value);
 
     publish_message_to(PC_OUTPUT_BUS_TOPIC, get_register(WATCHER_TYPE_PC)->value); // set pc output bus to let know addsub new pc value

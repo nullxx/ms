@@ -37,62 +37,52 @@ int get_data_bus(void) { return word_to_int(last_bus_data->next_value); }
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_pccar(void) { return control_bus->next_value.bits[CONTROL_BUS_PCCAR_BIT_POSITION]; }
+int get_control_bus_cfz(void) { return control_bus->next_value.bits[CONTROL_BUS_CFZ_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_accar(void) { return control_bus->next_value.bits[CONTROL_BUS_ACCAR_BIT_POSITION]; }
+int get_control_bus_cb(void) { return control_bus->next_value.bits[CONTROL_BUS_CB_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_acbus(void) { return control_bus->next_value.bits[CONTROL_BUS_ACBUS_BIT_POSITION]; }
+int get_control_bus_ca(void) { return control_bus->next_value.bits[CONTROL_BUS_CA_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_spcar(void) { return control_bus->next_value.bits[CONTROL_BUS_SPCAR_BIT_POSITION]; }
+int get_control_bus_cri(void) { return control_bus->next_value.bits[CONTROL_BUS_CRI_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_2opcar(void) { return control_bus->next_value.bits[CONTROL_BUS_OP2CAR_BIT_POSITION]; }
+int get_control_bus_cpc(void) { return control_bus->next_value.bits[CONTROL_BUS_CPC_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_hcar(void) { return control_bus->next_value.bits[CONTROL_BUS_HCAR_BIT_POSITION]; }
+int get_control_bus_wr(void) { return control_bus->next_value.bits[CONTROL_BUS_WR_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_lcar(void) { return control_bus->next_value.bits[CONTROL_BUS_LCAR_BIT_POSITION]; }
+int get_control_bus_alu0(void) { return control_bus->next_value.bits[CONTROL_BUS_ALU0_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_ricar(void) { return control_bus->next_value.bits[CONTROL_BUS_RICAR_BIT_POSITION]; }
+int get_control_bus_alu1(void) { return control_bus->next_value.bits[CONTROL_BUS_ALU1_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_regcar(void) { return control_bus->next_value.bits[CONTROL_BUS_REGCAR_BIT_POSITION]; }
+int get_control_bus_mpx0(void) { return control_bus->next_value.bits[CONTROL_BUS_MPX0_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_regbus(void) { return control_bus->next_value.bits[CONTROL_BUS_REGBUS_BIT_POSITION]; }
-
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-int get_control_bus_membus(void) { return control_bus->next_value.bits[CONTROL_BUS_MEMBUS_BIT_POSITION]; }
-
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-int get_control_bus_le(void) { return control_bus->next_value.bits[CONTROL_BUS_LE_BIT_POSITION]; }
+int get_control_bus_mpx1(void) { return control_bus->next_value.bits[CONTROL_BUS_MPX1_BIT_POSITION]; }
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
@@ -101,9 +91,8 @@ int get_control_bus_selalu(void) {
     Word selalu_lb;
     initialize_word(&selalu_lb, 0);
 
-    selalu_lb.bits[0] = control_bus->next_value.bits[CONTROL_BUS_SELALU_0_BIT_POSITION];
-    selalu_lb.bits[1] = control_bus->next_value.bits[CONTROL_BUS_SELALU_1_BIT_POSITION];
-    selalu_lb.bits[2] = control_bus->next_value.bits[CONTROL_BUS_SELALU_2_BIT_POSITION];
+    selalu_lb.bits[0] = control_bus->next_value.bits[CONTROL_BUS_ALU0_BIT_POSITION];
+    selalu_lb.bits[1] = control_bus->next_value.bits[CONTROL_BUS_ALU1_BIT_POSITION];
 
     return word_to_int(selalu_lb);
 }

@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/components/cu.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Saturday, 2nd April 2022 1:23:02 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

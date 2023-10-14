@@ -1,6 +1,6 @@
 /*
  * File: /src/linker/mem.c
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Friday, 22nd April 2022 2:44:53 am
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

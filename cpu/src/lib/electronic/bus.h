@@ -18,6 +18,7 @@ typedef struct {
 } Bus_t;
 
 void init_buses(void);
+void shutdown_buses(void);
 void update_bus_data(Bus_t *bus_t);
 
 Bus_t *create_bus_data(void);

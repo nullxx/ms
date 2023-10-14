@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/components/cu/d4flipflop.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Friday, 15th April 2022 3:42:08 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/definitions.c
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Friday, 15th April 2022 11:32:59 am
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

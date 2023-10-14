@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/components/sp.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Thursday, 25th March 2022 15:42:00 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

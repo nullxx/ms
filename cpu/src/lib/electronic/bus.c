@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/electronic/bus.c
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Thursday, 24th March 2022 8:06:53 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----
@@ -16,6 +16,10 @@
 #include "../definitions.h"
 #include "../pubsub.h"
 #include "../utils.h"
+
+PubSubMiddleware *data_bus_middleware = NULL;
+PubSubMiddleware *dir_bus_middleware_1 = NULL;
+PubSubMiddleware *dir_bus_middleware_2 = NULL;
 
 static int check_data_bus_overflow(Word value) {
     if (get_used_bits(value) > DATA_BUS_SIZE_BITS) {
@@ -52,11 +56,17 @@ void update_bus_data(Bus_t *bus_t) { bus_t->current_value = bus_t->next_value; }
 
 static void check_buses_overflow(void) {
     // data bus
-    add_topic_middleware(DATA_BUS_TOPIC, check_data_bus_overflow);
+    data_bus_middleware = add_topic_middleware(DATA_BUS_TOPIC, check_data_bus_overflow);
 
     // dir bus
-    add_topic_middleware(DIR_BUS_TOPIC_1, check_dir_bus_overflow);
-    add_topic_middleware(DIR_BUS_TOPIC_2, check_dir_bus_overflow);
+    dir_bus_middleware_1 = add_topic_middleware(DIR_BUS_TOPIC_1, check_dir_bus_overflow);
+    dir_bus_middleware_2 = add_topic_middleware(DIR_BUS_TOPIC_2, check_dir_bus_overflow);
 }
 
 void init_buses(void) { check_buses_overflow(); }
+
+void shutdown_buses(void) {
+    rm_topic_middleware(data_bus_middleware);
+    rm_topic_middleware(dir_bus_middleware_1);
+    rm_topic_middleware(dir_bus_middleware_2);
+}

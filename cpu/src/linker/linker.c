@@ -1,6 +1,6 @@
 /*
  * File: /src/linker.c
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Saturday, 16th April 2022 8:43:06 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----
@@ -20,6 +20,7 @@
 #include "mem.h"
 #include "cu.h"
 #include "bus.h"
+#include "registers.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -39,6 +40,7 @@ void init(void) {
     init_linker_mem();
     init_linker_cu();
     init_linker_bus();
+    init_linker_registers();
 }
 
 #ifdef __EMSCRIPTEN__
@@ -50,6 +52,7 @@ void shutdown(void) {
     shutdown_linker_mem();
     shutdown_linker_bus();
     shutdown_components();
+    shutdown_linker_registers();
 }
 
 #ifdef __EMSCRIPTEN__

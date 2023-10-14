@@ -1,12 +1,12 @@
 //
 //  pubsub.c
-//  mpp-cpu
+//  cpu
 //
 //  Created by Jon Lara trigo on 22/3/22.
 //
 
 #include "pubsub.h"
-
+#include <stdbool.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +14,6 @@
 
 #include "constants.h"
 #include "linkedlist.h"
-#include "logger.h"
 #include "utils.h"
 
 // TODO check in all files that use subscribe and unsubscribe if they check return of those functions

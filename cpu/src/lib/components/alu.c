@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/components/alu.c
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Tuesday, 29th March 2022 10:28:57 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----
@@ -10,143 +10,120 @@
 
 #include "alu.h"
 
-#include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <assert.h>
 
 #include "../constants.h"
 #include "../electronic/bus.h"
+#include "../electronic/adder.h"
+#include "../electronic/xor.h"
 #include "../error.h"
 #include "../pubsub.h"
 #include "../utils.h"
 #include "components.h"
-
-static Bus_t *last_bus_acumm_output = NULL;  // A
-static Bus_t *last_bus_op2_output = NULL;    // B
+#include "../logger.h"
 static Bus_t *control_bus = NULL;
+static Bus_t *alu_a_bus = NULL;
+static Bus_t *alu_b_bus = NULL;
 
-static PubSubSubscription *acumm_output_bus_topic_subscription = NULL;
-static PubSubSubscription *opt_output_bus_topic_subscription = NULL;
 static PubSubSubscription *control_bus_topic_subscription = NULL;
+static PubSubSubscription *alu_a_bus_topic_subscription = NULL;
+static PubSubSubscription *alu_b_bus_topic_subscription = NULL;
 
-void run_alu(void) {
-    update_bus_data(last_bus_acumm_output);
-    update_bus_data(last_bus_op2_output);
-    update_bus_data(control_bus);
+static PubSubMiddleware *fz_mid = NULL;
 
-    Word selalu_lb;
-    Word alubus_lb;
-    initialize_word(&selalu_lb, 0);
-    initialize_word(&alubus_lb, 0);
-
-    selalu_lb.bits[0] = control_bus->current_value.bits[CONTROL_BUS_SELALU_0_BIT_POSITION];
-    selalu_lb.bits[1] = control_bus->current_value.bits[CONTROL_BUS_SELALU_1_BIT_POSITION];
-    selalu_lb.bits[2] = control_bus->current_value.bits[CONTROL_BUS_SELALU_2_BIT_POSITION];
-
-    alubus_lb.bits[0] = control_bus->current_value.bits[CONTROL_BUS_ALUBUS_BIT_POSITION];
-
-    int sel_alu = word_to_int(selalu_lb);
-    int bus_acumm_output = word_to_int(last_bus_acumm_output->next_value);
-    int bus_op2_output = word_to_int(last_bus_op2_output->next_value);
-    uint8_t is_fc_working = 0;
-    int result = 0;
-
-
-    switch (sel_alu) {
-        case SUM: {
-            // A+B
-            result = bus_acumm_output + bus_op2_output;
-            is_fc_working = 1;
-            break;
-        }
-
-        case SUB: {
-            // A-B
-            result = bus_acumm_output - bus_op2_output;
-            is_fc_working = 1;
-            break;
-        }
-
-        case AND: {
-            // A AND B
-            result = bus_acumm_output & bus_op2_output;
-            break;
-        }
-
-        case OR: {
-            // A OR B
-            result = bus_acumm_output | bus_op2_output;
-            break;
-        }
-
-        case XOR: {
-            // A XOR B
-            result = bus_acumm_output ^ bus_op2_output;
-            break;
-        }
-
-        case NOT: {
-            // NOT A
-            result = ~bus_acumm_output;
-            break;
-        }
-
-        case TRANSPARENT: {
-            // transparent step
-            result = bus_op2_output;
-            break;
-        }
-
-        case INCREMENT: {
-            // B+1
-            result = bus_op2_output + 1;
-            break;
-        }
-
-        default:
-            break;
+static int enable_fz(Word value)
+{
+    if (control_bus->current_value.bits[CONTROL_BUS_CFZ_BIT_POSITION] == 1)
+    {
+        publish_message_to(ALU_FZ_OUTPUT_BUS_TOPIC, int_to_word(word_to_int(value) == 0));
     }
-
-    const int result_bits = get_used_bits(int_to_word(result));
-
-    int has_overflow = result_bits > DATA_BUS_SIZE_BITS;
-
-    publish_message_to(ALU_FC_OUTPUT_BUS_TOPIC, int_to_word(has_overflow && is_fc_working));
-
-    if (has_overflow) {
-        // get rid of the extra higher bits
-        Word word_result = int_to_word(result);
-        for (int i = WORD_SIZE_BIT - 1; i >= DATA_BUS_SIZE_BITS; i--) {
-            word_result.bits[i] = 0;
-        }
-
-        result = word_to_int(word_result);
-    }
-
-    // after the result is recalculated (if needed (fc == 1)) check for FZ
-    // if result == 0 => fz
-    int fz = result == 0;
-    publish_message_to(ALU_FZ_OUTPUT_BUS_TOPIC, int_to_word(fz));
-
-    if (word_to_int(alubus_lb) == 1) {
-        publish_message_to(DATA_BUS_TOPIC, int_to_word(result));
-    }
+    return 1;
 }
 
-void init_alu(void) {
-    last_bus_acumm_output = create_bus_data();
-    last_bus_op2_output = create_bus_data();
+void init_alu(void)
+{
     control_bus = create_bus_data();
-    acumm_output_bus_topic_subscription = subscribe_to(ACUMM_OUTPUT_BUS_TOPIC, last_bus_acumm_output);
-    opt_output_bus_topic_subscription = subscribe_to(OP2_OUTPUT_BUS_TOPIC, last_bus_op2_output);
+    alu_a_bus = create_bus_data();
+    alu_b_bus = create_bus_data();
+
     control_bus_topic_subscription = subscribe_to(CONTROL_BUS_TOPIC, control_bus);
+    alu_a_bus_topic_subscription = subscribe_to(ALU_A_BUS_TOPIC, alu_a_bus);
+
+    alu_b_bus_topic_subscription = subscribe_to(ALU_B_BUS_TOPIC, alu_b_bus);
+
+    fz_mid = add_topic_middleware(ALU_OUTPUT_BUS_TOPIC, enable_fz);
 }
 
-void shutdown_alu(void) {
-    unsubscribe_for(acumm_output_bus_topic_subscription);
-    unsubscribe_for(opt_output_bus_topic_subscription);
+void shutdown_alu(void)
+{
+    rm_topic_middleware(fz_mid);
+
     unsubscribe_for(control_bus_topic_subscription);
-    destroy_bus_data(last_bus_acumm_output);
-    destroy_bus_data(last_bus_op2_output);
+    unsubscribe_for(alu_a_bus_topic_subscription);
+    unsubscribe_for(alu_b_bus_topic_subscription);
+
     destroy_bus_data(control_bus);
+    destroy_bus_data(alu_a_bus);
+    destroy_bus_data(alu_b_bus);
+}
+
+void run_alu(void)
+{
+    update_bus_data(control_bus);
+    update_bus_data(alu_a_bus);
+    update_bus_data(alu_b_bus);
+
+    Word alu_sel;
+    initialize_word(&alu_sel, 0);
+    alu_sel.bits[0] = control_bus->current_value.bits[CONTROL_BUS_ALU0_BIT_POSITION];
+    alu_sel.bits[1] = control_bus->current_value.bits[CONTROL_BUS_ALU1_BIT_POSITION];
+
+    Word res;
+    initialize_word(&res, 0);
+
+    switch (word_to_int(alu_sel)) // MPX
+    {
+
+    case ADD:
+    {
+        unsigned int result;
+        unsigned int carry;
+
+        adder_16(word_to_int(alu_a_bus->current_value), word_to_int(alu_b_bus->current_value),
+                 &result, &carry);
+        res = int_to_word(result);
+        break;
+    }
+
+    case CMP:
+    {
+        res = int_to_word(
+            XOR_16(word_to_int(alu_a_bus->current_value),
+                   word_to_int(alu_b_bus->current_value)));
+
+        break;
+    }
+
+    case TRANSPARENT:
+    {
+        res = alu_b_bus->current_value;
+        break;
+    }
+
+    case NC:
+    { // NC
+        return;
+        break;
+    }
+
+    default:
+    {
+        Error err = {.show_errno = 0, .type = NOTICE_ERROR, .message = "Invalid ALU selection"};
+        return throw_error(err);
+        break;
+    }
+    }
+
+    publish_message_to(ALU_OUTPUT_BUS_TOPIC, res);
 }

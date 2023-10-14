@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/clock.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Thursday, 1st January 1970 12:00:00 am
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

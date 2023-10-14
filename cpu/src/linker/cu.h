@@ -1,6 +1,6 @@
 /*
  * File: /src/linker/cu.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Saturday, 23rd April 2022 1:36:42 am
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

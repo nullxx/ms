@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/utils.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Friday, 15th April 2022 1:23:58 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----

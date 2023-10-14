@@ -1,6 +1,6 @@
 /*
  * File: /src/lib/components/cu/seq.h
- * Project: mpp-cpu
+ * Project: cpu
  * File Created: Thursday, 14th April 2022 12:59:00 pm
  * Author: https://github.com/nullxx (mail@nullx.me)
  * -----
