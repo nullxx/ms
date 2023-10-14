@@ -17,6 +17,7 @@ import { Space, Button, Tooltip, Collapse, List } from "antd";
 import { getCore, notifyUpdateToSubscribers } from "../../../lib/core/index";
 import I18n, { useI18n } from "../../../components/i18n";
 import toast from "react-hot-toast";
+import { getFin } from "../../Coder/components/CodeEditor";
 
 const { Panel } = Collapse;
 
@@ -78,10 +79,12 @@ export default function RunButtons() {
     );
     _running.current = true;
     setRunning(true);
+
     while (_running.current) {
       clockCycleTime = getCore().run_clock_cycle(true);
       const nextState = getCore().get_next_state();
-      if (nextState === 0) break;
+      const currentState = getCore().get_state();
+      if (nextState === 0 || (currentState === 11 && nextState === 1)) break; // (currentState === 11 && nextState === 1) is cheating, but it is the only way I found to execute BEQ
       await sleep(cycleTime, isBreak.current.signal);
     }
     setRunning(false);
@@ -90,6 +93,11 @@ export default function RunButtons() {
 
   async function handleRunProgram() {
     setRunning(true);
+    const fin = getFin();
+    if (!fin) {
+      setRunning(false);
+      return;
+    }
 
     let t;
     if (isRuningInmediate) {
@@ -111,16 +119,17 @@ export default function RunButtons() {
       SettingDefaultValue.CYCLE_TIME
     );
     _running.current = true;
-    const maxRepresentableValue =
-      Math.pow(2, getCore().get_memory_value_size_bits()) - 1;
+
     let stoping = false;
 
     let lastCheck = start;
     while (_running.current) {
       clockCycleTime = getCore().run_clock_cycle(!isRuningInmediate);
       if (stoping) break; // doing this to "execute" FF. S0 -> S1 -> (next) S0. And leave ready for next
-      const riRegister = getCore().get_register_ri();
-      stoping = riRegister === maxRepresentableValue;
+      const pcRegister = getCore().get_register_pc();
+      const currentState = getCore().get_state();
+      const nextState = getCore().get_next_state();
+      stoping = (fin?.address + 1) === (pcRegister) && (nextState === 0 || (currentState === 11 && nextState === 1));
       await sleep(cycleTime, isBreak.current.signal);
 
       const now = new Date().getTime();
@@ -130,7 +139,7 @@ export default function RunButtons() {
         const shouldContinue = await new Promise((resolve) => {
           toast(
             (t) => (
-              <div style={{display: 'block'}}>
+              <div style={{ display: 'block' }}>
                 <b><I18n k="status.runningTooLong" capitalize /></b>
                 <div style={{ height: 10 }} />
                 <div style={{ display: "flex", gap: 10 }}>
@@ -244,7 +253,7 @@ export default function RunButtons() {
             }}
             icon={<SendOutlined />}
             onClick={handleRunProgram}
-            disabled={running}
+            disabled={running || !getFin()?.hasFin}
             size={"middle"}
           />
         </Tooltip>

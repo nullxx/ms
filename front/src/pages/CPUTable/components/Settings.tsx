@@ -124,7 +124,7 @@ const Settings: React.FC = () => {
     setIsOpen(checked);
     if (checked)
       setStoredValue(SettingType.ONBOARDING, !checked, setOnboarding);
-    
+
     notifyChange(SettingType.ONBOARDING, checked);
   };
 
@@ -145,7 +145,12 @@ const Settings: React.FC = () => {
         title={<I18n k="settings.title" />}
         placement="right"
         onClose={onClose}
-        visible={visible}
+        open={visible}
+        styles={{
+          mask: {
+            backdropFilter: "blur(2px)",
+          }
+        }}
       >
         <Input.Group size="large">
           <Row gutter={8}>
@@ -173,11 +178,9 @@ const Settings: React.FC = () => {
         <Input.Group size="large">
           <Row gutter={8}>
             <Col span={24}>
-              <span className="ant-input-group-wrapper">
-                <span className="ant-input-wrapper ant-input-group">
-                  <span className="ant-input-group-addon">
-                    <I18n k="settings.memoryValueBase" />
-                  </span>
+              <span className="ant-input-group-wrapper" style={{ height: 50 }}>
+                <span className="ant-input-wrapper ant-input-group" style={{ height: '100%', gap: 10, display: 'flex', alignItems: 'center' }}>
+                  <I18n k="settings.memoryValueBase" />
                   <Select
                     value={memValueBase}
                     onChange={handleMemValueBaseChange}
@@ -201,10 +204,8 @@ const Settings: React.FC = () => {
           <Row gutter={8}>
             <Col span={24}>
               <span className="ant-input-group-wrapper">
-                <span className="ant-input-wrapper ant-input-group">
-                  <span className="ant-input-group-addon">
+              <span className="ant-input-wrapper ant-input-group" style={{ height: '100%', gap: 10, display: 'flex', alignItems: 'center' }}>
                     <I18n k="settings.language" />
-                  </span>
                   <Select value={language} onChange={handleLanguageChange}>
                     {getAvailableLanguageNames().map((lang) => (
                       <Option key={lang} value={lang}>

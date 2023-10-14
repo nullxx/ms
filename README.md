@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to mpp 👋</h1>
+<h1 align="center">Welcome to MS 👋</h1>
 <p>
   <a href="https://opensource.org/licenses/MIT" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
@@ -8,9 +8,9 @@
   </a>
 </p>
 
-> Mpp is a simulator for the machine ++
-### Read the [docs](https://mpp-docs.nullx.me)
-### ✨ [Demo](https://mpp.nullx.me)
+> MS is a simulator for the maquina sencilla
+### Read the [docs](https://ms-docs.nullx.me)
+### ✨ [Demo](https://ms.nullx.me)
 
 ![demo_welcome](demo/demo_welcome.png)
 ![demo_board](demo/demo_board.png)

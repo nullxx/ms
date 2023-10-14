@@ -37,6 +37,7 @@ import ALUNode from "./components/ALUNode";
 import I18n from "../../components/i18n";
 import { useTour } from "@reactour/tour";
 import { getStoredValue, setStoredValue } from "../../lib/storage";
+import VariablesNode from "./components/VariablesNode";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -47,6 +48,7 @@ const nodeTypes: NodeTypes = {
   stateTransition: StateTransition as unknown as ReactNode,
   busNode: BusNode as unknown as ReactNode, // not used
   debuggerNode: DebuggerNode as unknown as ReactNode,
+  variablesNode: VariablesNode as unknown as ReactNode,
   flagsNode: FlagsNode as unknown as ReactNode,
   cycleTimeNode: CycleTimeNode as unknown as ReactNode,
   aluNode: ALUNode as unknown as ReactNode,
@@ -82,16 +84,16 @@ function CPUTable({ hidden }: { hidden: boolean }) {
   return (
     <>
       <Layout style={{ height: "100%" }}>
-        <Header className="mpp-header">
+        <Header className="ms-header">
           <Row>
-            <Space align="center" style={{ height: "100%" }}>
-              <img src={icon} style={{ width: 30 }} alt="Icon" />
+            <div style={{ alignItems: 'center', display: 'flex', gap: 7 }}>
+              <img src={icon} style={{ width: 30, height: 'auto' }} alt="Icon" />
               <h1 style={{ margin: 0 }}>
                 <I18n k="title" />
               </h1>
               <Github />
               <Docs />
-            </Space>
+            </div>
             <div style={{ flexGrow: 1 }} />
             <Space>
               <Settings />

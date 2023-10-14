@@ -1,313 +1,433 @@
-/**
- * DO NOT LOOK HERE
- * THIS IS THE MAGIC
- * IT IS NOT A GOOD WAY TO DO IT
- * IT IS HORRIBLE
- * BUT IT WORKS
- * --
- * I KNOW IT IS HORRIBLE
- * BUT IT WORKS
- * --
- * I WILL REFACTOR IT
- * SOON
- * --
- * MAYBE I WILL HAVE TO REDO IT ALL OVER AGAIN
- */
+export interface CompiledBitLine {
+    bits: string;
+    address: number;
+    sourceCodeLine?: number;
+}
 
+export interface TraslationError {
+    message: string;
+    line: number;
+}
 
-/**
- * if you want to redo this check this https://github.com/nullxx/mpp-compiler/blob/master/src/lib/instruction.ts and this https://github.com/nullxx/mpp-compiler/blob/master/src/lib/allocator.ts
- */
+export interface Data {
+    name: string;
+    value: number | string;
+    address: number;
+    sourceCodeLine: number;
+}
 
-import instructions from "./operations.json";
+interface Label {
+    name: string;
+    address: number;
+}
 
 interface Instruction {
-  HEX: string;
-  NEMO: string;
-  REGEX: string;
-  GRUPO: number;
-  ALLOC: number;
+    instructionName: string;
+    source: {
+        isLabel: boolean;
+        value: number | string;
+        isConstant: boolean;
+        isVariable: boolean;
+    };
+    dest: {
+        isLabel: boolean;
+        value: number | string;
+        isConstant: boolean;
+        isVariable: boolean;
+    };
+    address: number;
+    sourceCodeLine: number;
 }
 
-interface Marker {
-  lineFrom: number;
-  lineTo: number;
-  startCol: number;
-  endCol: number;
+export interface Fin {
+    hasFin: boolean;
+    label: string;
+    address: number;
+    sourceCodeLine: number;
+}
+interface ParseLexResult {
+    version: number;
+    dataStartAddress: number;
+    data: Data[];
+    labels: Label[];
+    instructions: Instruction[];
+    fin: Fin;
+    errors: TraslationError[];
 }
 
-const ETI_START_NAME = "T";
-const COMMENT_LINE_START = "#";
+export const parseInput = (code: string, offset: number = 0) => {
+    const parseLexResult = parseAndLex(code, offset);
 
-export interface TraslationError extends Marker {
-  message: string;
-}
-export interface Comment extends Marker {}
-
-let setEtiquetas: string[] = [];
-
-const checkCommentLine = (line: string) => {
-  const startCommentIndex = line.indexOf(COMMENT_LINE_START);
-  if (startCommentIndex > -1) {
-    return line.slice(0, startCommentIndex).trimEnd();
-  }
-  return line;
-};
-
-const parseInput = (text: string, initDir: number) => {
-  setEtiquetas = [];
-  let results: Result[] = [];
-  const errors: TraslationError[] = [];
-  const comments: Comment[] = [];
-  const lines = text
-    .split("\n")
-    .map((line) => line.trim())
-    .map((line) => checkCommentLine(line));
-
-  pre(lines);
-
-  for (let i = 0; i < lines.length; i++) {
-    let line = lines[i];
-    if (!line) continue;
-
-    const startCommentIndex = line.indexOf(COMMENT_LINE_START);
-    if (startCommentIndex !== -1) {
-      comments.push({
-        lineFrom: i,
-        lineTo: i,
-        startCol: startCommentIndex,
-        endCol: line.length,
-      });
-      if (startCommentIndex === 0) {
-        continue;
-      } else {
-        line = line.slice(0, startCommentIndex).trimEnd(); // trim because of the space(s) between the code and the #
-      }
+    if (parseLexResult.errors.length > 0) {
+        return {
+            errors: parseLexResult.errors,
+            bits: [] as CompiledBitLine[],
+            variables: [] as Data[],
+            fin: parseLexResult.fin,
+        };
     }
 
-    const result = executeRegex(line);
-    if (!result || result.result.length === 0) {
-      errors.push({
-        lineFrom: i,
-        lineTo: i,
-        startCol: 0,
-        endCol: line.length,
-        message: "Syntax error",
-      });
-      continue;
-    }
+    const bits = generateBits(parseLexResult);
 
-    results.push({ ...result, originalOffset: i });
-  }
-
-  const etiPositions = calculateEtiquetasPos(results, initDir);
-  results = post(results, initDir);
-
-  return {
-    errors,
-    results: results,
-    etiPositions,
-    comments,
-  };
+    return {
+        errors: [],
+        bits,
+        variables: parseLexResult.data,
+        fin: parseLexResult.fin,
+    };
 };
 
-const pre = (lines: string[]) => {
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    for (let j = 0; j < instructions.length; j++) {
-      const instruction = instructions[j];
+function parseAndLex(sourceCode: string, offset: number) {
+    const info: ParseLexResult = {
+        version: -1,
+        dataStartAddress: -1,
+        data: [],
+        labels: [],
+        instructions: [],
+        fin: {
+            address: -1,
+            label: '',
+            hasFin: false,
+            sourceCodeLine: -1,
+        },
+        errors: [],
+    };
 
-      const words = line.split(" ");
-      const posibleSetEti = words[0];
-      const line2 = words.slice(1, words.length);
-      const result = new RegExp(instruction.REGEX, "gim").exec(line2.join(" "));
+    const lines = sourceCode.split('\n').map(line => line.trim());
 
-      if (result && result.length > 1) {
-        setEtiquetas.push(posibleSetEti);
-      }
-    }
-  }
-};
+    let currentSection = null;
 
-const post = (results: Result[], initDir: number) => {
-  const etiPositions = calculateEtiquetasPos(results, initDir);
+    let address = offset;
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.length === 0) continue;
 
-  for (let i = 0; i < results.length; i++) {
-    const result = results[i];
-    if (!result.result) continue;
+        if (line.startsWith('.ver')) {
+            currentSection = 'version';
+            const versionRes = /\.(ver)\s+(\d+)/.exec(line);
+            if (!versionRes) {
+                info.errors.push({
+                    message: `Error parsing version in line ${i + 1}`,
+                    line: i,
+                });
+                continue;
+            }
 
-    for (let j = 1; j < result.result.length; j++) {
-      let r = result.result[j];
-      const eti = etiPositions.find((s) => s.eti.eti === r);
-      if (eti) {
-        result.result.splice(j, 1);
-        const etiDirHex = Number(eti.dir)
-          .toString(16)
-          .toUpperCase()
-          .padStart(4, "0");
+            info.version = Number(versionRes[2]);
+        } else if (line.startsWith('.data')) {
+            currentSection = 'data';
+            const dataRes = /(\.data)\s*(\d*)$/i.exec(line);
+            if (!dataRes) {
+                info.errors.push({
+                    message: `Error parsing data in line ${i + 1}`,
+                    line: i,
+                });
+                continue;
+            }
+            if (dataRes[2]?.length > 0)
+                info.dataStartAddress = Number(dataRes[2]);
+        } else if (line.startsWith('.code')) {
+            currentSection = 'code';
+        } else if (line.startsWith('.fin')) {
+            // .fin <label_name>
+            const [, , labelName] = /(\.fin)\s+([a-zA-Z_]\w*)/.exec(line) || [];
+            if (!labelName) {
+                info.errors.push({
+                    message: `Expected label`,
+                    line: i,
+                });
+                continue;
+            }
 
-        for (let i = 0; i < etiDirHex.length; i += 2) {
-          result.result.push(etiDirHex.slice(i, i + 2));
+            info.fin = {
+                label: labelName,
+                address: -1,
+                hasFin: true,
+                sourceCodeLine: i,
+            };
+        } else if (line.startsWith(';')) {
+            continue;
+        } else if (line.startsWith('.')) {
+            info.errors.push({
+                message: `Unknown section '${line}'`,
+                line: i,
+            });
+            continue;
+        } else if (currentSection === 'data') {
+            const [, name, value] = line.split(' ');
+            const exists = info.data.find(data => data.name === name);
+            if (exists) {
+                info.errors.push({
+                    message: `'${name}' already exists`,
+                    line: i,
+                });
+                continue;
+            }
+
+            info.data.push({ name, value, sourceCodeLine: i, address: -1 });
+        } else if (currentSection === 'code') {
+            const labelResult = /((.+):)?\s*(.*)/.exec(line);
+            const [, , label, instruction] = labelResult || [];
+            if (label) {
+                info.labels.push({
+                    name: label,
+                    address,
+                });
+            }
+            const instructionResult = /^[ \t\r]*(\w+:)?[ \t\r]*(add|beq|mov|cmp)[ \t\r]+(((0[xX][0-9a-fA-F]+)|(\d+)|([a-zA-z]+\d*))*[ \t\r]*,)?[ \t\r]*((0[xX][0-9a-fA-F]+)|(\d+)|([a-zA-z]+\d*))*/i.exec(instruction);
+            if (instructionResult === null) {
+                continue;
+            }
+            const instructionName = instructionResult[2];
+            let source = instructionResult[4];
+            const dest = instructionResult[11] || instructionResult[9] || instructionResult[10];
+
+            // if (!source && !/beq/i.test(instructionName)) {
+            //     info.errors.push({
+            //         message: `src and dest is required for instruction '${instructionName}'`,
+            //         line: i,
+            //     });
+            //     continue;
+            // }
+
+            if (!source && /beq/i.test(instructionName)) {
+                source = dest;
+            }
+
+            if (!source || !dest) {
+                info.errors.push({
+                    message: `src or dest or both is required for instruction '${instructionName}'`,
+                    line: i,
+                });
+                continue;
+            }
+
+            const parsedSource = parseNumberOrVariable(source);
+            const parsedDest = parseNumberOrVariable(dest);
+
+            if (parsedSource && typeof parsedSource === 'number' && parsedSource > Math.pow(2, 7)-1) {
+                info.errors.push({
+                    message: `${parsedSource} is out of range. Max value is ${Math.pow(2, 7)-1}`,
+                    line: i,
+                });
+                continue;
+            }
+
+            if (parsedDest && typeof parsedDest === 'number' && parsedDest > Math.pow(2, 7)-1) {
+                info.errors.push({
+                    message: `${parsedDest} is out of range. Max value is ${Math.pow(2, 7)-1}`,
+                    line: i,
+                });
+                continue;
+            }
+
+            info.instructions.push({
+                instructionName,
+                source: {
+                    isLabel: /beq/i.test(instructionName), // not the best way to do it,
+                    value: parsedSource,
+                    isConstant: Boolean(source) && !isNaN(Number(parsedSource)),
+                    isVariable: isNaN(Number(parsedSource)) && !/beq/i.test(instructionName),
+                },
+                dest: {
+                    isLabel: /beq/i.test(instructionName), // not the best way to do it
+                    value: parsedDest,
+                    isConstant: Boolean(dest) && !isNaN(Number(parsedDest)),
+                    isVariable: isNaN(Number(parsedDest)) && !/beq/i.test(instructionName),
+                },
+                address: address++,
+                sourceCodeLine: i,
+            });
+        } else {
+            info.errors.push({
+                message: 'Could not parse',
+                line: i,
+            });
         }
-      } else if (!checkIsHex(r)) {
-        // is not !hex && !eti => error
-        results.splice(i, 1);
-      }
-    }
-  }
-  return results;
-};
-interface RegexResponse {
-  line: string;
-  result: string[];
-  eti: string;
-  instruction: Instruction;
-}
-
-type Result = RegexResponse & { originalOffset: number };
-
-const executeRegex = (line: string): RegexResponse | null => {
-  for (let i = 0; i < instructions.length; i++) {
-    const instruction = instructions[i] as Instruction;
-    let eti = "";
-    let result = new RegExp(instruction.REGEX, "gim").exec(line);
-    if (!result) {
-      const words = line.split(" ");
-      const posibleSetEti = words[0];
-      const line2 = words.slice(1, words.length);
-      result = new RegExp(instruction.REGEX, "gim").exec(line2.join(" "));
-
-      if (result && result.length > 1) {
-        if (!posibleSetEti.startsWith(ETI_START_NAME)) return null;
-        eti = posibleSetEti;
-      }
     }
 
-    if (result && result.length > 1) {
-      const traslateOut = translate(
-        instruction,
-        result.slice(1, result.length)
-      );
+    // noooooo!!!!!
+    // info.instructions.forEach(instruction => {
+    //     if (instruction.dest.isLabel) {
+    //         const attachedLabel = info.labels.find(label => label.name === instruction.dest.value);
+    //         if (!attachedLabel) info.errors.push({
+    //             message: `Label '${instruction.dest}' not found`,
+    //             line: instruction.sourceCodeLine,
+    //         })
+    //         if (attachedLabel) {
+    //             // instruction.destIsLabel = true;
+    //             instruction.dest.value = attachedLabel.address;
+    //         }
+    //     }
+    // });
 
-      return { line, result: traslateOut, eti, instruction };
-    }
-  }
-  return null;
-};
 
-const checkIsHex = (word: string) => {
-  for (let i = 0; i < word.length; i++) {
-    const l = word[i];
-    const r = parseInt(l, 16);
-    if (isNaN(r)) return false;
-  }
-  return true;
-};
+    // add to data the constants
 
-const translate = (instruction: Instruction, ops: string[]) => {
-  const length = ops.length;
-  const OPHexCode = instruction.HEX;
+    // info.instructions.forEach(instruction => {
+    // if (instruction.source.isConstant) {
+    //     const constantExists = info.data.find(data => data.value === instruction.source.value && data.name.startsWith('const_'));
+    //     if (!constantExists)
+    //         info.data.push({
+    //             name: `const_${instruction.address}_src`,
+    //             value: instruction.source.value,
+    //         });
 
-  if (length === 1) {
-    return [OPHexCode];
-  } else if (length === 2) {
-    if (instruction.GRUPO < 4) {
-      return [OPHexCode];
+    // }
+
+    //     if (instruction.dest.isConstant) {
+    //         const constantExists = info.data.find(data => data.value === instruction.dest.value and data.name.startsWith('const_'));
+    //         if (!constantExists)
+    //             info.data.push({
+    //                 name: `const_${instruction.address}_dest`,
+    //                 value: instruction.dest.value,
+    //             });
+    //     }
+    // })
+
+    address++; // one address in blank
+
+    if (info.dataStartAddress === -1 || isNaN(info.dataStartAddress)) {
+        info.dataStartAddress = address;
     } else {
-      const inmORDir = ops[1];
-      const isDir = instruction.NEMO.includes("dir");
-      const isInm = instruction.NEMO.includes("inm");
-      if (!inmORDir) return [];
-
-      if (inmORDir.startsWith(ETI_START_NAME)) {
-        if (!setEtiquetas.includes(inmORDir)) return [];
-        return [OPHexCode, inmORDir];
-      }
-
-      const isHex = checkIsHex(inmORDir);
-      if (!isHex) return [];
-
-      const hex = parseInt(inmORDir, 16);
-      if (isDir && hex > 0xffff) return [];
-      if (isInm && hex > 0xff) return [];
-
-      if (isDir) {
-        const newHex = hex.toString(16).padStart(4, "0");
-        return [OPHexCode, newHex.slice(0, 2), newHex.slice(2)];
-      } else {
-        const newHex = hex.toString(16).padStart(2, "0");
-        return [OPHexCode, newHex.slice(0, 2)];
-      }
-    }
-  } else if (length === 3) {
-    // only one code
-    if (instruction.GRUPO < 4) {
-      return [OPHexCode];
-    } else {
-      const inmORDir = ops[1];
-      const isDir = instruction.NEMO.includes("dir");
-      const isInm = instruction.NEMO.includes("inm");
-      if (!inmORDir) return [];
-
-      if (inmORDir.startsWith(ETI_START_NAME)) {
-        if (!setEtiquetas.includes(inmORDir)) return [];
-        return [OPHexCode, inmORDir];
-      }
-
-      const isHex = checkIsHex(inmORDir);
-      if (!isHex) return [];
-
-      const hex = parseInt(inmORDir, 16);
-      if (isDir && hex > 0xffff) return [];
-      if (isInm && hex > 0xff) return [];
-
-      if (isDir) {
-        const newHex = hex.toString(16).padStart(4, "0");
-        return [OPHexCode, newHex.slice(0, 2), newHex.slice(2)];
-      } else {
-        const newHex = hex.toString(16).padStart(2, "0");
-        return [OPHexCode, newHex.slice(0, 2)];
-      }
-    }
-  }
-  return [];
-};
-
-export interface EtiquetaPos extends Marker {
-  eti: RegexResponse;
-  dir: number;
-}
-
-const calculateEtiquetasPos = (
-  results: Result[],
-  initDir: number
-): EtiquetaPos[] => {
-  const toReturn: EtiquetaPos[] = [];
-  const defEtiquetas = results.filter((r) => r.eti);
-  for (let i = 0; i < defEtiquetas.length; i++) {
-    const defEtiqueta = defEtiquetas[i];
-    let sum = 0;
-    for (let j = 0; j < results.length; j++) {
-      const result = results[j];
-      if (!result.result) continue;
-      if (result === defEtiqueta) {
-        break;
-      } else {
-        sum += result.instruction.ALLOC;
-      }
+        address = info.dataStartAddress;
     }
 
-    toReturn.push({
-      eti: defEtiqueta,
-      dir: initDir + sum,
-      lineFrom: defEtiqueta.originalOffset ?? -1,
-      lineTo: defEtiqueta.originalOffset ?? -1,
-      startCol: defEtiqueta.line.indexOf(defEtiqueta.eti),
-      endCol:
-        defEtiqueta.line.indexOf(defEtiqueta.eti) + defEtiqueta.eti.length,
+    info.data.forEach(data => {
+        data.address = address++;
     });
-  }
-  return toReturn;
-};
 
-export { parseInput };
+    info.instructions.forEach(instruction => {
+        // if (instruction.source.isConstant) {
+        //     instruction.source.value = info.data.find(data => data.value === instruction.source.value and data.name.startsWith('const_'))!.address!;
+        // }
+
+        //     if (instruction.dest.isConstant) {
+        //         instruction.dest.value = info.data.find(data => data.value === instruction.dest.value and data.name.startsWith('const_'))!.address!;
+        //     }
+
+        if (instruction.source.isVariable) {
+            const attachedData = info.data.find(data => data.name === instruction.source.value);
+            if (!attachedData) info.errors.push({
+                message: `Variable '${instruction.source.value}' not found`,
+                line: instruction.sourceCodeLine,
+            })
+            if (attachedData) {
+                instruction.source.value = attachedData.address!;
+            }
+        }
+
+        if (instruction.dest.isVariable) {
+            const attachedData = info.data.find(data => data.name === instruction.dest.value);
+            if (!attachedData) info.errors.push({
+                message: `Variable '${instruction.dest.value}' not found`,
+                line: instruction.sourceCodeLine,
+            })
+            if (attachedData) {
+                instruction.dest.value = attachedData.address!;
+            }
+        }
+
+        if (instruction.source.isLabel) {
+            const attachedLabel = info.labels.find(label => label.name === instruction.source.value);
+            if (!attachedLabel) info.errors.push({
+                message: `Label '${instruction.source.value}' not found`,
+                line: instruction.sourceCodeLine,
+            })
+            if (attachedLabel) {
+                instruction.source.value = attachedLabel.address;
+            }
+        }
+        if (instruction.dest.isLabel) {
+            const attachedLabel = info.labels.find(label => label.name === instruction.dest.value);
+            if (!attachedLabel) info.errors.push({
+                message: `Label '${instruction.source.value}' not found`,
+                line: instruction.sourceCodeLine,
+            })
+            if (attachedLabel) {
+                instruction.dest.value = attachedLabel.address;
+            }
+        }
+    });
+
+    if (info.fin.label) {
+        const labelExists = info.labels.find(label => label.name === info.fin.label);
+        if (!labelExists) {
+            info.errors.push({
+                message: `Label '${info.fin.label}' not found`,
+                line: info.fin.sourceCodeLine,
+            });
+        } else {
+            info.fin.address = labelExists.address;
+        }
+
+    }
+
+    return info;
+}
+
+const generateBits = (info: ParseLexResult) => {
+    const generateInstructionBits = (instruction: Instruction) => {
+        // dest takes 7 bits
+        // source takes 7 bits
+        // instruction name takes 2 bits
+        // 16 bits in total
+
+        const instructionName = instruction.instructionName.toLowerCase();
+        const source = instruction.source.value;
+        const dest = instruction.dest.value;
+
+        const instructionNameBits = {
+            add: '00',
+            cmp: '01',
+            mov: '10',
+            beq: '11',
+        }[instructionName];
+
+        const sourceBits = (source || 0).toString(2).padStart(7, '0');
+        const destBits = dest.toString(2).padStart(7, '0');
+
+        return `${instructionNameBits}${sourceBits}${destBits}`;
+    }
+
+    const generateDataBits = (data: Data) => {
+        return Number(data.value).toString(2).padStart(16, '0');
+    }
+
+    const compiledBitLines: CompiledBitLine[] = [];
+
+    info.instructions.forEach(instruction => {
+        const bits = generateInstructionBits(instruction);
+        compiledBitLines.push({
+            bits,
+            address: instruction.address,
+            sourceCodeLine: instruction.sourceCodeLine,
+        });
+    });
+
+    info.data.forEach(data => {
+        const bits = generateDataBits(data);
+        compiledBitLines.push({
+            bits,
+            address: data.address!,
+        });
+    });
+
+    return compiledBitLines;
+}
+
+function parseNumberOrVariable(numOrStr: string | number): number | string {
+    if (numOrStr === undefined) return numOrStr;
+
+    if (typeof numOrStr === 'number') return numOrStr;
+
+    if (typeof numOrStr === 'string') {
+        if (numOrStr.startsWith('0x')) {
+            return parseInt(numOrStr, 16);
+        } else if (/^\d+$/.test(numOrStr)) {
+            return Number(numOrStr);
+        }
+    }
+
+    return numOrStr;
+}

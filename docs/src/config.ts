@@ -1,6 +1,6 @@
 export const SITE = {
   title: "Documentación",
-  description: "M++ simulator docs.",
+  description: "MS simulator docs.",
   defaultLanguage: "es_ES",
 };
 
@@ -9,12 +9,12 @@ export const KNOWN_LANGUAGES = {
 };
 
 // Uncomment this to add an "Edit this page" button to every page of documentation.
-export const GITHUB_EDIT_URL = `https://github.com/nullxx/mpp/tree/master/_docs/`;
+export const GITHUB_EDIT_URL = `https://github.com/nullxx/ms/tree/master/_docs/`;
 
 // Uncomment this to enable site search.
 // See "Algolia" section of the README for more information.
 export const ALGOLIA = {
-  indexName: "mpp",
+  indexName: "ms",
   appId: "4XDPZIOFPF",
   apiKey: "e8db70aaba31745b2946a0ad7f32f6cf",
 };
@@ -22,7 +22,7 @@ export const ALGOLIA = {
 export const SIDEBAR = {
   es: [
     { text: "", header: true },
-    { text: "Sobre mpp", header: true },
+    { text: "Sobre ms", header: true },
     { text: "Introducción", link: "es/introduction" },
     { text: "Arquitectura", link: "es/architecture" },
     { text: "Detalles", link: "es/about" },

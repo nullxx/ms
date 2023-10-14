@@ -11,13 +11,11 @@ import {
 
 export default function FlagsNode({ data, id }: any) {
   const [fz, setFz] = useState(false);
-  const [fc, setFc] = useState(false);
   const [changed, setChanged] = useState(false);
 
   function onUIUpdate() {
     const fz = Boolean(execute<number>("get_register_fz"));
-    const fc = Boolean(execute<number>("get_register_fc"));
-
+    console.log("fz", fz);
     let hasChanged = false;
     setFz((prevFz) => {
       if (prevFz !== fz) {
@@ -25,13 +23,6 @@ export default function FlagsNode({ data, id }: any) {
         return fz;
       }
       return prevFz;
-    });
-    setFc((prevFc) => {
-      if (prevFc !== fc) {
-        hasChanged = true;
-        return fc;
-      }
-      return prevFc;
     });
 
     setChanged(hasChanged);
@@ -92,11 +83,6 @@ export default function FlagsNode({ data, id }: any) {
       <Row>
         <Tooltip title={<I18n k={data.fzHelpInfoKey} />}>
           <Checkbox checked={fz}>FZ</Checkbox>
-        </Tooltip>
-      </Row>
-      <Row>
-        <Tooltip title={<I18n k={data.fcHelpInfoKey} />}>
-          <Checkbox checked={fc}>FC</Checkbox>
         </Tooltip>
       </Row>
     </div>

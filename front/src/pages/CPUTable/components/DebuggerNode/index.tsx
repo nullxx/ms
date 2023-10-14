@@ -161,7 +161,7 @@ const DebuggerNode = ({ data }: { data: any }) => {
       <Row>
         <Col size="100%">
           <Text tag="h4" textSize="display4">
-            {data.label}
+            <I18n k={data.labelKey} />
           </Text>
         </Col>
       </Row>

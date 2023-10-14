@@ -1,15 +1,15 @@
-import type { MppCore, UIUpdateCallbackFn } from "./types";
-import libmppModule from "./files/libmpp";
-import { emptyMppCore } from "./types";
+import type { MSCore, UIUpdateCallbackFn } from "./types";
+import libmsModule from "./files/libMaquinaSencilla";
+import { emptyMSCore } from "./types";
 import toast from "react-hot-toast";
 
 let moduleInstance: any;
-export let mppCore: MppCore | null;
+export let msCore: MSCore | null;
 
 const uiUpdatesSubscriptions = new Set<UIUpdateCallbackFn>();
 
 const exportedMethods: {
-  name: keyof MppCore;
+  name: keyof MSCore;
   returnType: "number" | "string" | "array" | null;
   typeArgs: ("number" | "string")[];
 }[] = [
@@ -49,79 +49,8 @@ const exportedMethods: {
     returnType: null,
     typeArgs: ["number", "number"],
   },
-
-  {
-    name: "get_register_acum",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_acum",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_fc",
-    returnType: "number",
-    typeArgs: [],
-  },
   {
     name: "get_register_fz",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_b",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_c",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_d",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_e",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_h",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_l",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_2op",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_pch",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_pcl",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_pc",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_register_sp",
     returnType: "number",
     typeArgs: [],
   },
@@ -131,7 +60,37 @@ const exportedMethods: {
     typeArgs: [],
   },
   {
+    name: "get_register_ri_C0",
+    returnType: "number",
+    typeArgs: [],
+  },
+  {
+    name: "get_register_ri_F",
+    returnType: "number",
+    typeArgs: [],
+  },
+  {
+    name: "get_register_ri_D",
+    returnType: "number",
+    typeArgs: [],
+  },
+  {
+    name: "get_register_pc",
+    returnType: "number",
+    typeArgs: [],
+  },
+  {
     name: "set_register_pc",
+    returnType: null,
+    typeArgs: ["number"],
+  },
+  {
+    name: "get_register_alu_ra",
+    returnType: null,
+    typeArgs: ["number"],
+  },
+  {
+    name: "get_register_alu_rb",
     returnType: null,
     typeArgs: ["number"],
   },
@@ -157,62 +116,52 @@ const exportedMethods: {
     typeArgs: [],
   },
   {
-    name: "get_control_bus_pccar",
+    name: "get_control_bus_cfz",
     returnType: "number",
     typeArgs: [],
   },
   {
-    name: "get_control_bus_accar",
+    name: "get_control_bus_cb",
     returnType: "number",
     typeArgs: [],
   },
   {
-    name: "get_control_bus_acbus",
+    name: "get_control_bus_ca",
     returnType: "number",
     typeArgs: [],
   },
   {
-    name: "get_control_bus_spcar",
+    name: "get_control_bus_cri",
     returnType: "number",
     typeArgs: [],
   },
   {
-    name: "get_control_bus_2opcar",
+    name: "get_control_bus_cpc",
     returnType: "number",
     typeArgs: [],
   },
   {
-    name: "get_control_bus_hcar",
+    name: "get_control_bus_wr",
     returnType: "number",
     typeArgs: [],
   },
   {
-    name: "get_control_bus_lcar",
+    name: "get_control_bus_alu0",
     returnType: "number",
     typeArgs: [],
   },
   {
-    name: "get_control_bus_ricar",
+    name: "get_control_bus_alu1",
     returnType: "number",
     typeArgs: [],
   },
   {
-    name: "get_control_bus_regcar",
+    name: "get_control_bus_mpx0",
     returnType: "number",
     typeArgs: [],
   },
   {
-    name: "get_control_bus_regbus",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_control_bus_membus",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_control_bus_le",
+    name: "get_control_bus_mpx1",
     returnType: "number",
     typeArgs: [],
   },
@@ -231,6 +180,16 @@ const exportedMethods: {
     returnType: null,
     typeArgs: [],
   },
+  {
+    name: "get_rom_pos",
+    returnType: "number",
+    typeArgs: [],
+  },
+  {
+    name: "get_processed_state",
+    returnType: "number",
+    typeArgs: [],
+  }
 ];
 
 export function getCConsoleHandle() {
@@ -255,57 +214,57 @@ export function getCConsoleHandle() {
 }
 
 export async function loadInstance(): Promise<void> {
-  moduleInstance = await libmppModule(getCConsoleHandle());
-  const tmpMppCore = emptyMppCore();
+  moduleInstance = await libmsModule(getCConsoleHandle());
+  const tmpmsCore = emptyMSCore();
 
   for (const method of exportedMethods) {
     const { name, returnType, typeArgs } = method;
-    tmpMppCore[name as keyof MppCore] = moduleInstance.cwrap(
+    tmpmsCore[name as keyof MSCore] = moduleInstance.cwrap(
       name,
       returnType,
       typeArgs
     );
   }
 
-  mppCore = tmpMppCore;
+  msCore = tmpmsCore;
 }
 
 export async function connectBackend() {
-  if (mppCore) {
-    console.warn("MppCore already loaded");
+  if (msCore) {
+    console.warn("msCore already loaded");
     return;
   }
 
   await loadInstance();
-  if (!mppCore) throw new Error("MppCore not loaded");
-  console.info("MppCore loaded");
+  if (!msCore) throw new Error("msCore not loaded");
+  console.info("msCore loaded");
 
   execute("init");
 
-  console.info("MppCore initialized");
+  console.info("msCore initialized");
 
   createUpdateUICallback();
-  console.info("MppCore UI callback connected");
+  console.info("msCore UI callback connected");
 }
 
 export async function disconnectBackend() {
-  if (!mppCore) {
-    console.warn("MppCore not loaded");
+  if (!msCore) {
+    console.warn("msCore not loaded");
     return;
   }
 
   execute("shutdown");
-  mppCore = null;
+  msCore = null;
 }
 
 export function getCore() {
-  if (!mppCore) throw new Error("MppCore not loaded");
-  return mppCore;
+  if (!msCore) throw new Error("msCore not loaded");
+  return msCore;
 }
 
-export function execute<T = any>(method: keyof MppCore, ...args: unknown[]) {
-  if (!mppCore) throw new Error("MppCore not loaded");
-  const response = (mppCore[method as keyof MppCore] as Function)(...args);
+export function execute<T = any>(method: keyof MSCore, ...args: unknown[]) {
+  if (!msCore) throw new Error("msCore not loaded");
+  const response = (msCore[method as keyof MSCore] as Function)(...args);
   return response as T;
 }
 
@@ -326,5 +285,5 @@ export function createUpdateUICallback() {
     notifyUpdateToSubscribers();
   }, "v");
 
-  mppCore?.linker_set_update_ui(fnPtr);
+  msCore?.linker_set_update_ui(fnPtr);
 }

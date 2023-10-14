@@ -10,14 +10,10 @@ import { Handle, Position } from "../../../lib/ReactFlow";
 import I18n from "../../../components/i18n";
 
 enum SelAluOp {
-  SUM = 0b000,
-  SUB = 0b001,
-  AND = 0b010,
-  OR = 0b011,
-  XOR = 0b100,
-  NOT = 0b101,
-  TRANSPARENT = 0b110,
-  INCREMENT = 0b111,
+  ADD = 0b00,
+  CMP = 0b01,
+  TRANSPARENT = 0b10,
+  NC = 0b11
 }
 
 const DEFAULT_SELALU_VALUE = 0;

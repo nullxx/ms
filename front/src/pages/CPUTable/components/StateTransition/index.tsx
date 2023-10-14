@@ -10,7 +10,6 @@ import usePrev from "../../../../hook/usePrev";
 import IconButton from "../../../../components/IconButton";
 import { DeleteOutlined } from "@ant-design/icons";
 import I18n from "../../../../components/i18n";
-const { Step } = Steps;
 
 interface State {
   state: number;
@@ -39,11 +38,17 @@ export default function StateTransition({ data }: { data: any }) {
     const nextStateNumber = getCore().get_next_state();
     const currentStateNumber = getCore().get_state();
 
-    if (currentStateNumber === prevCurrentState) return;
-    if (nextStateNumber === prevNextState) return;
+    if (currentStateNumber === prevCurrentState) {
+      console.log("Same state current and prev", currentStateNumber);
+      return;
+    }
+    if (nextStateNumber === prevNextState) {
+      console.log("Same state next and prev", nextStateNumber);
+      return;
+    }
 
-    const nextState = stateDetails[nextStateNumber];
-    const currentState = stateDetails[currentStateNumber];
+    const nextState = stateDetails.find((s) => s.state === nextStateNumber)!;
+    const currentState = stateDetails.find((s) => s.state === currentStateNumber)!;
 
     setStates((prev) => {
       const arr = [...prev];
@@ -102,26 +107,28 @@ export default function StateTransition({ data }: { data: any }) {
       </Row>
       <Row>
         <Col size="100%">
-          <Steps direction="vertical" size="small" current={currentStep}>
-            {states.map((state: State, index: number, arr) => {
-              const title =
-                index === arr.length - 1 ? (
-                  <I18n k="transitionstates.nextState" />
-                ) : (
-                  <>
-                    <CheckCircleFilled style={{ color: "green" }} /> <I18n k="transitionstates.executed" />
-                  </>
-                );
-              return (
-                <Step
-                  className="state-transition-step"
-                  key={index}
-                  title={title}
-                  description={state.op}
-                  progressDot={() => "S" + state.state}
-                />
-              );
-            })}
+          <Steps direction="vertical" size="small" current={currentStep}
+            type="default"
+
+            items={
+              states.map((state: State, index: number, arr) => {
+                const title =
+                  index === arr.length - 1 ? (
+                    <I18n k="transitionstates.nextState" />
+                  ) : (
+                    <>
+                      <CheckCircleFilled style={{ color: "green" }} /> <I18n k="transitionstates.executed" />
+                    </>
+                  );
+
+                return {
+                  title: title,
+                  description: state.op,
+                  progressDot: () => "S" + state.state,
+                  subTitle: "S" + state.state,
+                }
+              })
+            }>
           </Steps>
         </Col>
       </Row>

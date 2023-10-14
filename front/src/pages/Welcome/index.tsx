@@ -25,7 +25,7 @@ export default function Welcome() {
     >
       <Typography.Title><I18n k="title" /></Typography.Title>
 
-      <img src={Image} alt="M++" height={200} />
+      <img src={Image} alt="MS" height={200} />
       <p><I18n k="words.loading" />...</p>
       <Spin size="large" />
 

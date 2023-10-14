@@ -14,7 +14,7 @@ export default defineConfig({
     mdx(),
     sitemap(),
   ],
-  site: `https://mpp-docs.nullx.me`,
+  site: `https://ms-docs.nullx.me`,
   build: {
     format: "file",
   },

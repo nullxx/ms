@@ -99,7 +99,7 @@ const MemoryNode = ({ data, id }: { data: any; id: string }) => {
 
   function onUIUpdate() {
     setSearchValue(getCore().get_memory_dir_bus());
-    setLE(getCore().get_control_bus_le());
+    setLE(getCore().get_control_bus_wr());
     forceUpdate(); // need to update state to force re-render because the searchValue is not changed, but the MemoryComponent could be changed
   }
 
@@ -172,7 +172,7 @@ const MemoryNode = ({ data, id }: { data: any; id: string }) => {
       </Row>
       <Row>
         <Col size="100%">
-          {LE ? <I18n k="memory.reading" /> : <I18n k="memory.writting" />}
+          {LE ? <I18n k="memory.writting" /> : <I18n k="memory.reading" />}
         </Col>
       </Row>
     </div>

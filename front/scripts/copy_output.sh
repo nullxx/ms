@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cp ../../mpp-cpu/output/* ../src/lib/core/files
+cp ../../cpu/output/* ../src/lib/core/files

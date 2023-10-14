@@ -1,5 +1,5 @@
+import { getRunningVariables } from "../../pages/Coder/components/CodeEditor";
 import { execute } from "../core";
-import operations from "../traslator/operations.json";
 
 interface FindOperationValue {
   operation: string;
@@ -45,16 +45,64 @@ export function deductOperationOf(fromMemOffset: number, toMemOffset: number) {
   return operations;
 }
 
+const operations = [
+  {
+    NEMO: "ADD",
+    co: 0b00,
+    format(src: number, dest: number) {
+      const variables = getRunningVariables();
+      const srcVar = variables.find((v) => v.address === src);
+      const destVar = variables.find((v) => v.address === dest);
+
+      return `${this.NEMO} ${srcVar?.name || src}, ${destVar?.name || dest}`;    }
+  },
+  {
+    NEMO: "MOV",
+    co: 0b10,
+    format(src: number, dest: number) {
+      const variables = getRunningVariables();
+      const srcVar = variables.find((v) => v.address === src);
+      const destVar = variables.find((v) => v.address === dest);
+
+      return `${this.NEMO} ${srcVar?.name || src}, ${destVar?.name || dest}`;
+    }
+  },
+  {
+    NEMO: "CMP",
+    co: 0b01,
+    format(src: number, dest: number) {
+      const variables = getRunningVariables();
+      const srcVar = variables.find((v) => v.address === src);
+      const destVar = variables.find((v) => v.address === dest);
+
+      return `${this.NEMO} ${srcVar?.name || src}, ${destVar?.name || dest}`;    }
+  },
+  {
+    NEMO: "BEQ",
+    co: 0b11,
+    format(_src: number, dest: number) {
+      return `${this.NEMO} ${dest}`;
+    }
+  },
+]
 function findOperation(
   initOffset: number,
   memValue: number
 ): FindOperationValue | null {
-  const op = operations.find((o) => parseInt(o.HEX, 16) === memValue);
+  // the first low 7 bits of the memory value are the destination
+  // the following 7 bits are the source
+  // the following 2 bits are the operation
+  const co = (memValue & 0b1100000000000000) >> 14;
+  const src = (memValue & 0b0011111110000000) >> 7;
+  const dest = memValue & 0b0000000001111111;
+
+  const op = operations.find((o) => o.co === co);
+  // const op = operations.find((o) => parseInt(o.HEX, 16) === memValue);
   if (!op && !FILL_NO_OP) return null;
   if (!op) return { operation: NO_OP_NAME, range: [initOffset, initOffset] };
   return {
-    operation: doReplacements(initOffset, op.NEMO),
-    range: [initOffset, initOffset + op.ALLOC - 1],
+    operation: doReplacements(initOffset, op.format(src, dest)),
+    range: [initOffset, initOffset],
   };
 }
 

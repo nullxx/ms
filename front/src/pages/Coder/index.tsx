@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Drawer, Space, Popconfirm } from "antd";
+import { Space, Popconfirm, Modal } from "antd";
 import CodeEditor from "./components/CodeEditor";
 import { getCore } from "../../lib/core";
 import IconButton from "../../components/IconButton";
@@ -7,6 +7,7 @@ import { CodeOutlined, SaveOutlined, CloseOutlined } from "@ant-design/icons";
 import ResizeDrawer from "./components/ResizeDrawer";
 import { useEffect } from "react";
 import I18n, { useI18n } from "../../components/i18n";
+
 
 const Coder: React.FC = () => {
   const searchParams = new URLSearchParams(window.location.search);
@@ -17,6 +18,12 @@ const Coder: React.FC = () => {
   const [initOffset, setInitOffset] = useState(0);
   const [slots, setSlots] = useState<string[]>([]);
   const [maximize, setMaximize] = useState(false);
+
+  const modalStyles = {
+    mask: {
+      backdropFilter: 'blur(10px)',
+    },
+  };
 
   const showDefaultDrawer = () => {
     setVisible(true);
@@ -31,8 +38,7 @@ const Coder: React.FC = () => {
 
     for (let i = 0; i < slots.length; i++) {
       const slot = slots[i];
-
-      getCore().set_memory_value(initOffset + i, parseInt(slot, 16));
+      getCore().set_memory_value(initOffset + i, parseInt(slot, 2));
     }
     onClose();
   };
@@ -66,22 +72,17 @@ const Coder: React.FC = () => {
         />
       </Space>
 
-      <Drawer
-        width={maximize ? "100%" : undefined}
-        closable={false}
-        keyboard={false}
-        maskClosable={false}
-        closeIcon={null}
+      <Modal
         title={
           <Space align="center">
             <span>Code</span>
             <ResizeDrawer onResize={handleResize} />
           </Space>
         }
-        placement="right"
-        onClose={onClose}
-        visible={visible}
-        extra={
+        open={visible}
+        onOk={() => setVisible(false)}
+        onCancel={() => setVisible(false)}
+        footer={
           <Space>
             <Popconfirm
               title={<I18n k="areYouSure" />}
@@ -100,6 +101,17 @@ const Coder: React.FC = () => {
             />
           </Space>
         }
+        // classNames={classNames}
+        closable={false}
+        keyboard={false}
+        maskClosable={false}
+        closeIcon={null}
+        width={maximize ? "95%" : undefined}
+        styles={{
+          mask: modalStyles.mask,
+        }}
+        centered
+
       >
         <CodeEditor
           onNewTranslation={onNewTranslation}
@@ -107,7 +119,7 @@ const Coder: React.FC = () => {
           initialCode={initialCode}
           maximized={maximize}
         />
-      </Drawer>
+      </Modal>
     </>
   );
 };

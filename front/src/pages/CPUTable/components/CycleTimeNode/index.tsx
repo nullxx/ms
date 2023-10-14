@@ -10,7 +10,7 @@ import { Progress } from "antd";
 import { red, green, orange } from "@ant-design/colors";
 import I18n from "../../../../components/i18n";
 
-const maxTimeMS = 3;
+const maxTimeMS = 7;
 
 export default function CycleTimeNode({ data }: any) {
   const [lastCycleTime, setLastCycleTime] = React.useState(clockCycleTime);
