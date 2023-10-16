@@ -8,5 +8,15 @@
     "title": "A * B",
     "description": "Multiply two numbers",
     "code": ".ver 1\n\n.data\ndw\t\ta 5\ndw\t\tb 9\ndw\t\tresultado 0\ndw\t\taux1 0\ndw\t\taux2 0xFFFF\n\n.fin\tlblend\n\n.code\nstart:  add a, resultado\n\t\tadd aux2, b\n\t\tcmp b, aux1\n\t\tbeq lblend\n\t\tcmp 11, 11\n\t\tbeq start\n\t\tbeq lblend\n\nlblend:"
+  },
+  {
+    "title": "A / B",
+    "description": "Divide two numbers",
+    "code": ".ver 1\n\n; ATENCIÓN el programador debe asegurarse que el resultado es exacto, si no, no funciona.\n; 20 / 2\n.data\ndw dividendo\t0x14 ; 20\ndw divisor\t\t0xFFFE ; -2\ndw resultado\t0\ndw aux1\t\t\t0x0001\ndw aux2\t\t\t0x0000\n\n.fin\tlblend\n\n.code\nbegin:  add divisor, dividendo\n\t\tcmp aux2, dividendo\n\t\tbeq next\n\t\tadd aux1, resultado\n\t\tcmp aux2, aux2\n\t\tbeq begin\nnext:   add aux1, resultado\n\t\tcmp aux2, aux2\n\t\tbeq lblend\n\nlblend:"
+  },
+  {
+    "title": "Copy buffer",
+    "description": "Copies a buffer to another",
+    "code": ".ver 1\n\n.data\ndw\t\tlongitud 9 ; 8 + 1\ndw\t\taux1 0x0081\ndw\t\taux2 0\ndw\t\taux3 0xFFFF\n\ndw\t\tdato0 0\ndw\t\tdato1 1\ndw\t\tdato2 2\ndw\t\tdato3 3\ndw\t\tdato4 4\ndw\t\tdato5 5\ndw\t\tdato6 6\ndw\t\tdato7 7\ndw\t\tdato8 8\n\ndw\t\tout0 0\ndw\t\tout1 0\ndw\t\tout2 0\ndw\t\tout3 0\ndw\t\tout4 0\ndw\t\tout5 0\ndw\t\tout6 0\ndw\t\tout7 0\ndw\t\tout8 0\n\n.fin\tlblend\n\n.code\nbegin:  mov 0xC, 0x15\n\t\tadd aux3, longitud\n\t\tcmp aux2, longitud\n\t\tbeq lblend\n\t\tadd aux1, 0\n\t\tcmp aux3, aux3\n\t\tbeq begin\n\t\t\n\nlblend:"
   }
 ]
