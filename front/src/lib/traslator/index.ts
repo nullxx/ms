@@ -154,7 +154,8 @@ function parseAndLex(sourceCode: string, offset: number) {
             });
             continue;
         } else if (currentSection === 'data') {
-            const [, name, value] = line.split(' ');
+            const [,, name, value] = /(dw)\s+(\w+)\s+(0[xX][0-9a-fA-F]+|\d+)/.exec(line) || [];
+
             const exists = info.data.find(data => data.name === name);
             if (exists) {
                 info.errors.push({

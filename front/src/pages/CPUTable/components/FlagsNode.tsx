@@ -15,7 +15,6 @@ export default function FlagsNode({ data, id }: any) {
 
   function onUIUpdate() {
     const fz = Boolean(execute<number>("get_register_fz"));
-    console.log("fz", fz);
     let hasChanged = false;
     setFz((prevFz) => {
       if (prevFz !== fz) {

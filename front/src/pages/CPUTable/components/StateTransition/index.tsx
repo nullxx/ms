@@ -128,8 +128,7 @@ export default function StateTransition({ data }: { data: any }) {
                   subTitle: "S" + state.state,
                 }
               })
-            }>
-          </Steps>
+            } />
         </Col>
       </Row>
       <Row>

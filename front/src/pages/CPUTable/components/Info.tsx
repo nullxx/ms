@@ -31,11 +31,6 @@ const Info: React.FC = () => {
         placement="right"
         onClose={onClose}
         open={visible}
-        styles={{
-          mask: {
-            backdropFilter: "blur(2px)",
-          }
-        }}
       >
         <Space direction="vertical">
           <Divider style={{margin: 0}}><I18n k="info.about.title" /></Divider>

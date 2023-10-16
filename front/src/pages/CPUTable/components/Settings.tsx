@@ -146,11 +146,6 @@ const Settings: React.FC = () => {
         placement="right"
         onClose={onClose}
         open={visible}
-        styles={{
-          mask: {
-            backdropFilter: "blur(2px)",
-          }
-        }}
       >
         <Input.Group size="large">
           <Row gutter={8}>

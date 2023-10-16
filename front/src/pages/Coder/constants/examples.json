@@ -2,6 +2,11 @@
   {
     "title": "SUM 5 times 1",
     "description": null,
-    "code": ".ver 1\n\n.data\ndw a 0\ndw cnst_1 1\ndw target 5\n\n.fin lblend\n\n.code\nbegin: add cnst_1, a ; a + 1\ncmp a, target\nbeq lblend\ncmp 0xf, 0xf\nbeq begin\nlblend: mov 0, 0"
+    "code": ".ver 1\n\n.data\ndw\t\ta 0\ndw\t\tcnst_1 1\ndw\t\ttarget 5\n\n.fin\tlblend\n\n.code\nbegin:  add cnst_1, a ; a + 1\n\t\tcmp a, target\n\t\tbeq lblend\n\t\tcmp 0xf, 0xf\n\t\tbeq begin\n\nlblend:"
+  },
+  {
+    "title": "A * B",
+    "description": "Multiply two numbers",
+    "code": ".ver 1\n\n.data\ndw\t\ta 5\ndw\t\tb 9\ndw\t\tresultado 0\ndw\t\taux1 0\ndw\t\taux2 0xFFFF\n\n.fin\tlblend\n\n.code\nstart:  add a, resultado\n\t\tadd aux2, b\n\t\tcmp b, aux1\n\t\tbeq lblend\n\t\tcmp 11, 11\n\t\tbeq start\n\t\tbeq lblend\n\nlblend:"
   }
 ]
