@@ -156,6 +156,7 @@ const Settings: React.FC = () => {
                 type="number"
                 max={5000}
                 min={0}
+                addonAfter={<I18n k="settings.cycleTimeMs" />}
                 onChange={handleCycleTimeChange}
               />
             </Col>
