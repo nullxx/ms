@@ -32,7 +32,7 @@ function MemoryComponentRow({
 
   return (
     <Row style={style}>
-      <Col>{offset.toUpperCase()}</Col>
+      <Col>0x{offset.toUpperCase()}</Col>
       <Col>
         {Number(value).toString(valueBaseRadix).toUpperCase()}
         <sub>({valueBaseRadix})</sub>

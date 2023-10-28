@@ -1,7 +1,7 @@
 import { Input, Select, Modal, Tooltip, Button } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
 import React from "react";
-import { Base, bases } from "../constants/bases";
+import { Base, bases, prefixes } from "../constants/bases";
 import I18n from "./i18n";
 const { Option } = Select;
 
@@ -15,7 +15,7 @@ const getFormatted = (number: number, newBase: Base) => {
   const targetBase = bases.find(({ base }) => base === newBase);
   if (!targetBase) return "";
 
-  const value = Number(number).toString(targetBase.radix).toUpperCase();
+  const value = prefixes[newBase] + number.toString(targetBase.radix);
   return value;
 };
 
