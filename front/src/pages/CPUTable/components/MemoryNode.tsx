@@ -66,7 +66,7 @@ function MemoryComponent({ offset, base }: { offset: number; base: Base }) {
   return (
     <div style={{ overflow: "hidden" }}>
       <Row>
-        <Col>Offset</Col>
+        <Col>Address</Col>
         <Col>Value</Col>
       </Row>
       <MemoryComponentRow
