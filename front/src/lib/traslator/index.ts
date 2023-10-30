@@ -154,7 +154,7 @@ function parseAndLex(sourceCode: string, offset: number) {
             });
             continue;
         } else if (currentSection === 'data') {
-            const [,, name, value] = /(dw)\s+(\w+)\s+(0[xX][0-9a-fA-F]+|\d+)/.exec(line) || [];
+            const [, , name, value] = /(dw)\s+(\w+)\s+(0[xX][0-9a-fA-F]+|\d+)/.exec(line) || [];
 
             const exists = info.data.find(data => data.name === name);
             if (exists) {
@@ -177,6 +177,11 @@ function parseAndLex(sourceCode: string, offset: number) {
             }
             const instructionResult = /^[ \t\r]*(\w+:)?[ \t\r]*(add|beq|mov|cmp)[ \t\r]+(((0[xX][0-9a-fA-F]+)|(\d+)|([a-zA-z]+\d*))*[ \t\r]*,)?[ \t\r]*((0[xX][0-9a-fA-F]+)|(\d+)|([a-zA-z]+\d*))*/i.exec(instruction);
             if (instructionResult === null) {
+                if (instruction.length > 0)
+                    info.errors.push({
+                        message: `Could not parse instruction '${instruction}'`,
+                        line: i,
+                    });
                 continue;
             }
             const instructionName = instructionResult[2];
@@ -206,17 +211,17 @@ function parseAndLex(sourceCode: string, offset: number) {
             const parsedSource = parseNumberOrVariable(source);
             const parsedDest = parseNumberOrVariable(dest);
 
-            if (parsedSource && typeof parsedSource === 'number' && parsedSource > Math.pow(2, 7)-1) {
+            if (parsedSource && typeof parsedSource === 'number' && parsedSource > Math.pow(2, 7) - 1) {
                 info.errors.push({
-                    message: `${parsedSource} is out of range. Max value is ${Math.pow(2, 7)-1}`,
+                    message: `${parsedSource} is out of range. Max value is ${Math.pow(2, 7) - 1}`,
                     line: i,
                 });
                 continue;
             }
 
-            if (parsedDest && typeof parsedDest === 'number' && parsedDest > Math.pow(2, 7)-1) {
+            if (parsedDest && typeof parsedDest === 'number' && parsedDest > Math.pow(2, 7) - 1) {
                 info.errors.push({
-                    message: `${parsedDest} is out of range. Max value is ${Math.pow(2, 7)-1}`,
+                    message: `${parsedDest} is out of range. Max value is ${Math.pow(2, 7) - 1}`,
                     line: i,
                 });
                 continue;
