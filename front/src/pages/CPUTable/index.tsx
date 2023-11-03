@@ -20,6 +20,7 @@ import icon from "../../assets/icon.png";
 import initialNodes from "./constants/nodes";
 import initialEdges from "./constants/edges";
 import RegisterNode from "./components/RegisterNode";
+import RINode from "./components/RINode";
 import LoadableNode from "./components/LoadableNode";
 import BusNode from "./components/BusNode";
 import MemoryNode from "./components/MemoryNode";
@@ -52,6 +53,7 @@ const nodeTypes: NodeTypes = {
   flagsNode: FlagsNode as unknown as ReactNode,
   cycleTimeNode: CycleTimeNode as unknown as ReactNode,
   aluNode: ALUNode as unknown as ReactNode,
+  riNode: RINode as unknown as ReactNode,
 };
 
 function CPUTable({ hidden }: { hidden: boolean }) {

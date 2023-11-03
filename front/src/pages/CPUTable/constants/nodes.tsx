@@ -61,8 +61,8 @@ const nodes: Node[] = [
     id: "8",
     data: {
       labelKey: "controlunit.label",
-      width: 400,
-      height: 120,
+      width: 440,
+      height: 200,
     },
     draggable: false,
     position: { x: -787, y: 62 },
@@ -76,7 +76,7 @@ const nodes: Node[] = [
     position: { x: 20, y: 40 },
     parentNode: "8",
     draggable: false,
-    type: "registerNode",
+    type: "riNode",
     data: {
       labelKey: "ri.label",
       readOnly: true,
@@ -94,7 +94,7 @@ const nodes: Node[] = [
   },
   {
     id: "8b",
-    position: { x: 200, y: 40 },
+    position: { x: 140, y: 125 },
     parentNode: "8",
     draggable: false,
     type: "registerNode",
@@ -160,7 +160,7 @@ const nodes: Node[] = [
   },
   {
     id: "clockCycleTime",
-    position: { x: -777, y: 207 },
+    position: { x: -300, y: 230 },
     draggable: false,
     type: "cycleTimeNode",
     data: {
