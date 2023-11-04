@@ -68,7 +68,7 @@
   "flags.helpInfo": "Las banderas se utilizan para indicar el estado de la última operación de ALU.",
   "flags.fzHelpInfo": "FZ es un flag que indica si el resultado de la última operación ALU es cero.",
   "transitionstate.label": "Estados",
-  "debugger.label": "Depurador",
+  "debugger.label": "Inspecionador",
   "variables.label": "Variables",
   "flags.label": "Flags",
   "clockCycleTime.label": "Tiempo de ciclo",
@@ -92,6 +92,7 @@
   "debugger.memoryRange": "Rango de memoria",
   "debugger.operation": "Operación",
   "debugger.boundsPadding": "Elementos por encima y por debajo",
+  "debugger.breakpoint": "Breakpoint",
   "variables.variableName": "Nombre",
   "variables.variableValue": "Valor",
   "variables.variableAddress": "Dirección",
@@ -103,5 +104,7 @@
   "tour.info": "Aquí podrás ver información sobre el simulador.",
   "tour.openSource": "Y recuerda que este software es de código abierto 😋",
   "status.runningTooLong": "El programa lleva ejecutandose demasiado tiempo. (recuerda que podría ser que se ha alcanzado un bucle infinito) ¿Qué quieres hacer?",
-  "invalidNumber": "Número inválido"
+  "invalidNumber": "Número inválido",
+  "breakpointReached": "Se ha alcanzado un breakpoint",
+  "cannotSetBreakpoint": "No puedes poner un breakpoint ahí"
 }

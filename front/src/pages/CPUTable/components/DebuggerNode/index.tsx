@@ -13,6 +13,7 @@ import {
 import { deductOperationOf, NO_OP_NAME } from "../../../../lib/debugger";
 import { useForceUpdate } from "../../../../hook/forceUpdate";
 import I18n from "../../../../components/i18n";
+import { getBreakpoints } from "../../../Coder/components/CodeEditor";
 
 const maxOffsetPadding = 50;
 
@@ -20,28 +21,32 @@ function DebuggerComponentRow({
   range,
   operation,
   focus,
+  isBreak,
 }: {
   range: [number, number];
   operation: string;
   focus: boolean;
+  isBreak: boolean;
 }) {
   return (
-    <Row className={focus ? "debuggerPointed" : undefined}>
-      <Col>
-        {range[0].toString(16).toUpperCase() +
-          "-" +
-          range[1].toString(16).toUpperCase()}
-      </Col>
-      {operation === NO_OP_NAME ? (
-        <Col className={focus ? "debuggerPointedOpNotFound" : undefined}>
-          {operation}
+    <Tooltip title={isBreak ? <I18n k="debugger.breakpoint" /> : undefined}>
+      <Row className={`${focus ? "debuggerPointed" : ''} ${isBreak ? "debuggerBreak" : ''}`}>
+        <Col>
+          {range[0].toString(16).toUpperCase() +
+            "-" +
+            range[1].toString(16).toUpperCase()}
         </Col>
-      ) : (
-        <Col className={focus ? "debuggerPointedOp" : undefined}>
-          {operation}
-        </Col>
-      )}
-    </Row>
+        {operation === NO_OP_NAME ? (
+          <Col className={`${focus ? "debuggerPointedOpNotFound" : ''}`}>
+            {operation}
+          </Col>
+        ) : (
+          <Col className={`${focus ? "debuggerPointedOp" : ''}`}>
+            {operation}
+          </Col>
+        )}
+      </Row>
+    </Tooltip>
   );
 }
 
@@ -64,6 +69,8 @@ function DebuggerComponent({
   const pointIndex = result.findIndex(
     ({ range: [start, end] }) => start <= memOffset && end >= memOffset
   );
+
+  const breakPoints = getBreakpoints();
 
   React.useEffect(() => {
     if (!pointerRef.current || !listScrollRef.current) return;
@@ -103,6 +110,7 @@ function DebuggerComponent({
       )}
       <div style={{ overflow: "hidden", maxHeight: 200 }} ref={listScrollRef}>
         {result.map((item, i) => {
+          const isBreak = breakPoints.includes(i);
           return (
             <div
               ref={pointIndex === i ? pointerRef : undefined}
@@ -112,6 +120,7 @@ function DebuggerComponent({
                 range={item.range}
                 operation={item.operation}
                 focus={pointIndex === i}
+                isBreak={isBreak}
               />
             </div>
           );

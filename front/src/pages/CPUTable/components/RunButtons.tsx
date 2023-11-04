@@ -17,7 +17,7 @@ import { Space, Button, Tooltip, Collapse, List } from "antd";
 import { getCore, notifyUpdateToSubscribers } from "../../../lib/core/index";
 import I18n, { useI18n } from "../../../components/i18n";
 import toast from "react-hot-toast";
-import { getFin } from "../../Coder/components/CodeEditor";
+import { getBreakpoints, getFin } from "../../Coder/components/CodeEditor";
 
 const { Panel } = Collapse;
 
@@ -112,6 +112,8 @@ export default function RunButtons() {
       await sleep(100, isBreak.current.signal); // wait for the toast to be rendered
     }
 
+    const breakpoints = getBreakpoints();
+
     let start = new Date().getTime();
 
     const cycleTime = getStoredValue(
@@ -127,9 +129,17 @@ export default function RunButtons() {
       clockCycleTime = getCore().run_clock_cycle(!isRuningInmediate);
       if (stoping) break; // doing this to "execute" FF. S0 -> S1 -> (next) S0. And leave ready for next
       const pcRegister = getCore().get_register_pc();
+      console.log(pcRegister);
       const currentState = getCore().get_state();
       const nextState = getCore().get_next_state();
-      stoping = (fin?.address + 1) === (pcRegister) && (nextState === 0 || (currentState === 11 && nextState === 1));
+      stoping = ((fin?.address + 1) === (pcRegister) && (nextState === 0 || (currentState === 11 && nextState === 1)));
+      if (breakpoints.includes(pcRegister) || (breakpoints.includes(pcRegister-1) && ((currentState === 11 && nextState === 1)))) {
+        stoping = true;
+        toast(<I18n k="breakpointReached" capitalize />, {
+          position: "top-center",
+          icon: "🛑",
+        });
+      }
       await sleep(cycleTime, isBreak.current.signal);
 
       const now = new Date().getTime();

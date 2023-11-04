@@ -68,7 +68,7 @@
   "flags.helpInfo": "Flags are used to indicate the status of the last ALU operation.",
   "flags.fzHelpInfo": "FZ is a flag that indicates whether the result of the last ALU operation is zero.",
   "transitionstate.label": "Transition state",
-  "debugger.label": "Debugger",
+  "debugger.label": "Inspector",
   "variables.label": "Variables",
   "flags.label": "Flags",
   "clockCycleTime.label": "Clock cycle time",
@@ -92,6 +92,7 @@
   "debugger.memoryRange": "Memory range",
   "debugger.operation": "Operation",
   "debugger.boundsPadding": "Bounds padding",
+  "debugger.breakpoint": "Breakpoint",
   "variables.variableName": "Name",
   "variables.variableValue": "Value",
   "variables.variableAddress": "Address",
@@ -103,5 +104,7 @@
   "tour.info": "Here you can see information about the simulator.",
   "tour.openSource": "And remember that this software is open source 😋",
   "status.runningTooLong": "The program has been running for too long. (remember that it could be that an infinite loop has been reached) What do you want to do?",
-  "invalidNumber": "Invalid number"
+  "invalidNumber": "Invalid number",
+  "breakpointReached": "Breakpoint reached",
+  "cannotSetBreakpoint": "You cannot set a breakpoint there"
 }

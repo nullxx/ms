@@ -96,6 +96,10 @@ html, body, #root, .App {
   font-size: large;
 }
 
+.debuggerBreak {
+  color: red;
+};
+
 .error-marker {
   /* code editor error marker */
   position: absolute;
@@ -213,4 +217,37 @@ html, body, #root, .App {
 
 .ant-input-group-addon {
   background-color: #fafafa !important;
+}
+
+.cgmr.breakpoint {
+  color: red;
+  font-size: 1.5em;
+}
+
+/* Change the background color on hover */
+.cgmr.breakpoint:hover {
+  /* background-color: #0056b3; */
+  opacity: 0.5;
+}
+
+.cgmr.breakpoint::before {
+  content: '⦾';
+}
+
+.line-error {
+  /* red */
+  background-color: #ff0000;
+  opacity: 0.2;
+}
+
+.margin-error {
+  /* red */
+  background-color: #ff0000;
+}
+
+.margin-error::before {
+  content: '✗';
+  color: white;
+  font-weight: bold;
+  font-size: 1.5em;
 }

@@ -1,6 +1,5 @@
 import React, { memo } from "react";
 import { Text, Row, Col } from "atomize";
-import NumberBaseInput from "../../../components/NumberBaseInput";
 import {
   execute,
   subscribeToUIUpdates,

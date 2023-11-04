@@ -21,7 +21,7 @@ interface Label {
     address: number;
 }
 
-interface Instruction {
+export interface Instruction {
     instructionName: string;
     source: {
         isLabel: boolean;
@@ -64,6 +64,7 @@ export const parseInput = (code: string, offset: number = 0) => {
             bits: [] as CompiledBitLine[],
             variables: [] as Data[],
             fin: parseLexResult.fin,
+            instructions: parseLexResult.instructions,
         };
     }
 
@@ -74,6 +75,7 @@ export const parseInput = (code: string, offset: number = 0) => {
         bits,
         variables: parseLexResult.data,
         fin: parseLexResult.fin,
+        instructions: parseLexResult.instructions,
     };
 };
 

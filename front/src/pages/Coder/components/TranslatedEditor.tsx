@@ -1,4 +1,5 @@
-import AceEditor from "react-ace";
+// import AceEditor from "react-ace";
+import Editor from '@monaco-editor/react';
 
 interface TranslatedEditorProps {
   traslated: string;
@@ -14,19 +15,19 @@ export default function TranslatedEditor({
   height = "200px",
 }: TranslatedEditorProps) {
   return (
-    <AceEditor
-      value={traslated}
-      name="traslated"
-      editorProps={{ $blockScrolling: true }}
-      setOptions={{
-        showLineNumbers: true,
-        firstLineNumber: initOffset,
-        readOnly: true,
-        fontSize: "14px",
-      }}
+    <Editor
       height={height}
       width={width}
-      mode="text"
+      defaultLanguage="text"
+      defaultValue={traslated}
+      value={traslated}
+      options={{
+        readOnly: true,
+        fontSize: 14,
+        minimap: {
+          enabled: false,
+        },
+      }}
     />
   );
 }
