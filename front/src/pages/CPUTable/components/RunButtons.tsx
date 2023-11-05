@@ -133,7 +133,7 @@ export default function RunButtons() {
       const currentState = getCore().get_state();
       const nextState = getCore().get_next_state();
       stoping = ((fin?.address + 1) === (pcRegister) && (nextState === 0 || (currentState === 11 && nextState === 1)));
-      if (breakpoints.includes(pcRegister) || (breakpoints.includes(pcRegister-1) && ((currentState === 11 && nextState === 1)))) {
+      if ((breakpoints.includes(pcRegister) && nextState === 0) || (breakpoints.includes(pcRegister-1) && ((currentState === 11 && nextState === 0)))) {
         stoping = true;
         toast(<I18n k="breakpointReached" capitalize />, {
           position: "top-center",
