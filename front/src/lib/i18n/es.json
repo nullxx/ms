@@ -106,5 +106,6 @@
   "status.runningTooLong": "El programa lleva ejecutandose demasiado tiempo. (recuerda que podría ser que se ha alcanzado un bucle infinito) ¿Qué quieres hacer?",
   "invalidNumber": "Número inválido",
   "breakpointReached": "Se ha alcanzado un breakpoint",
-  "cannotSetBreakpoint": "No puedes poner un breakpoint ahí"
+  "cannotSetBreakpoint": "No puedes poner un breakpoint ahí",
+  "automata.label": "Autómata"
 }

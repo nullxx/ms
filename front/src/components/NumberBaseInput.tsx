@@ -15,7 +15,7 @@ const getFormatted = (number: number, newBase: Base) => {
   const targetBase = bases.find(({ base }) => base === newBase);
   if (!targetBase) return "";
 
-  const value = prefixes[newBase] + number.toString(targetBase.radix);
+  const value = prefixes[newBase] + number.toString(targetBase.radix).toUpperCase();
   return value;
 };
 

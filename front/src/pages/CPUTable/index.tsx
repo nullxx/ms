@@ -39,6 +39,7 @@ import I18n from "../../components/i18n";
 import { useTour } from "@reactour/tour";
 import { getStoredValue, setStoredValue } from "../../lib/storage";
 import VariablesNode from "./components/VariablesNode";
+import AutomataNode from "./components/AutomataNode";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -54,6 +55,7 @@ const nodeTypes: NodeTypes = {
   cycleTimeNode: CycleTimeNode as unknown as ReactNode,
   aluNode: ALUNode as unknown as ReactNode,
   riNode: RINode as unknown as ReactNode,
+  automataNode: AutomataNode as unknown as ReactNode,
 };
 
 function CPUTable({ hidden }: { hidden: boolean }) {

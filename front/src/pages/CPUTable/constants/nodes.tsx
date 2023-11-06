@@ -138,8 +138,7 @@ const nodes: Node[] = [
   },
   {
     id: "variables",
-    // position: { x: -260, y: 54 },
-    position: { x: 100, y: -323 },
+    position: { x: 100, y: 120 },
     type: "variablesNode",
     data: {
       labelKey: "variables.label",
@@ -187,6 +186,17 @@ const nodes: Node[] = [
       labelKey: "databus.label",
       width: 800,
       getFunction: "get_data_bus",
+    },
+  },
+  {
+    id: "automata",
+    position: { x: 100, y: -323 },
+    draggable: false,
+    type: "automataNode",
+    data: {
+      labelKey: "automata.label",
+      width: 300,
+      height: 416
     },
   },
 ];
