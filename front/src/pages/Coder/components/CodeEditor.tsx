@@ -373,7 +373,7 @@ export default function CodeEditor({
             // defaultLanguage="javascript" 
             language="ms"
             defaultLanguage="ms"
-            defaultValue="// some comment"
+            defaultValue="; :)"
             value={code}
             onChange={(value, event) => onChange(value ?? '')}
             options={{
