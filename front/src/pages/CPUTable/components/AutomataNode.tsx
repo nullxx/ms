@@ -26,10 +26,32 @@ const baseDiagram = `stateDiagram-v2
     S1 --> S11 : 111
 `;
 
-async function renderAutomata(node: Element, text: string = baseDiagram) {
+const isSvgEmpty = (svg: string) => {
+    var parser = new DOMParser();
+    const doc = parser.parseFromString(svg, "image/svg+xml");
+
+    const gElement = doc.querySelector('g');
+    const isGEmpty = gElement?.children.length === 0;
+
+    return isGEmpty;
+}
+
+async function renderAutomata(node: HTMLElement, text: string = baseDiagram) {
     node.removeAttribute("data-processed");
-    node.innerHTML = text;
-    await mermaid.run().catch(e => e); // ignore errors
+    // node.innerHTML = text;
+
+    // await mermaid.run({ nodes: [node] }).catch(e => e); // ignore errors
+
+    const result = await mermaid.render('id0', text);
+    result.bindFunctions?.(node);
+
+    if (!isSvgEmpty(result.svg)) {
+        node.innerHTML = result.svg;
+    } else {
+        await renderAutomata(node, text);
+    }
+
+
 }
 
 export default function AutomataNode({ data }: { data: any }) {
@@ -46,12 +68,15 @@ export default function AutomataNode({ data }: { data: any }) {
         }
     }
 
-   async function initialize() {
+    async function initialize() {
         mermaid.initialize({
             startOnLoad: false,
             theme: "default",
+            fontSize: 12,
         });
         mermaid.contentLoaded();
+
+
 
         if (mermaidContainerRef.current) {
             await renderAutomata(mermaidContainerRef.current);
@@ -73,7 +98,7 @@ export default function AutomataNode({ data }: { data: any }) {
         <div
             style={{
                 height: data.height || 300,
-                overflow: "auto",
+                overflow: "hidden",
                 width: data.width || 220,
                 padding: 8,
                 backgroundColor: "#f5f5f5",

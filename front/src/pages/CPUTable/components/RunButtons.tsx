@@ -129,7 +129,6 @@ export default function RunButtons() {
       clockCycleTime = getCore().run_clock_cycle(!isRuningInmediate);
       if (stoping) break; // doing this to "execute" FF. S0 -> S1 -> (next) S0. And leave ready for next
       const pcRegister = getCore().get_register_pc();
-      console.log(pcRegister);
       const currentState = getCore().get_state();
       const nextState = getCore().get_next_state();
       stoping = ((fin?.address + 1) === (pcRegister) && (nextState === 0 || (currentState === 11 && nextState === 1)));
