@@ -17,7 +17,7 @@ export default memo(({ data, id }: any) => {
   const [value, setValue] = React.useState(DEFAULT_REGISTER_VALUE);
   const [changed, setChanged] = React.useState(false);
 
-  useUpdateEdges({ data, id });
+  const [controlBusBitLoad] = useUpdateEdges({ data, id });
 
   function onUIUpdate() {
     if (!data.getFunction)
@@ -48,9 +48,19 @@ export default memo(({ data, id }: any) => {
   return (
     <div
       className={`${changed ? "blob" : ""} pretty-shadow`}
-      style={{ padding: 6, backgroundColor: "#f5f5f5" }}
+      style={{ padding: 6, backgroundColor: "#f5f5f5", position: 'relative' }}
     >
       <Handles data={data} id={id} />
+
+      {controlBusBitLoad && <div style={{ height: 10, position: 'absolute', top: -37, left: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <svg style={{ fill: controlBusBitLoad.value ? 'red' : 'black' }} xmlns="http://www.w3.org/2000/svg" height={30} viewBox="0 0 32 32"><path d="M26.29 20.29 18 28.59V0h-2v28.59l-8.29-8.3-1.42 1.42 10 10a1 1 0 0 0 1.41 0l10-10z" data-name="2-Arrow Down" /></svg>
+          <p style={{ height: '100%' }}>
+            {controlBusBitLoad.name}: {controlBusBitLoad.value}
+          </p>
+        </div>
+      </div>
+      }
 
       <Row>
         <Col>
@@ -70,7 +80,7 @@ export default memo(({ data, id }: any) => {
             }
           >
             <Text tag="p" textSize="display5">
-            <I18n k={data.labelKey} />
+              <I18n k={data.labelKey} />
             </Text>
           </Tooltip>
         </Col>

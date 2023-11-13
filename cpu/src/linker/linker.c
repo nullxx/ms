@@ -21,6 +21,7 @@
 #include "cu.h"
 #include "bus.h"
 #include "registers.h"
+#include "alu.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -41,6 +42,7 @@ void init(void) {
     init_linker_cu();
     init_linker_bus();
     init_linker_registers();
+    init_linker_alu();
 }
 
 #ifdef __EMSCRIPTEN__
@@ -53,6 +55,7 @@ void shutdown(void) {
     shutdown_linker_bus();
     shutdown_components();
     shutdown_linker_registers();
+    shutdown_linker_alu();
 }
 
 #ifdef __EMSCRIPTEN__

@@ -39,7 +39,8 @@ typedef enum
     CU_SEQ_OUTPUT_D1_BUS_TOPIC,
     CU_SEQ_OUTPUT_D2_BUS_TOPIC,
 
-    CONTROL_BUS_TOPIC
+    CONTROL_BUS_TOPIC,
+    CONTROL_BUS_TOPIC_NEXT
 } PubSubTopic;
 
 typedef struct

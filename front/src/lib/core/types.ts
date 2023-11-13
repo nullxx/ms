@@ -24,18 +24,20 @@ export interface MSCore {
   get_register_alu_ra(): number;
   get_register_alu_rb(): number;
 
+  get_alu_output(): number;
+
   get_data_bus(): number;
-  get_control_bus_cfz(): number;
-  get_control_bus_cb(): number;
-  get_control_bus_ca(): number;
-  get_control_bus_cri(): number;
-  get_control_bus_cpc(): number;
-  get_control_bus_wr(): number;
-  get_control_bus_alu0(): number;
-  get_control_bus_alu1(): number;
-  get_control_bus_mpx0(): number;
-  get_control_bus_mpx1(): number;
-  get_control_bus_selalu(): number;
+  get_control_bus_next_cfz(): number;
+  get_control_bus_next_cb(): number;
+  get_control_bus_next_ca(): number;
+  get_control_bus_next_cri(): number;
+  get_control_bus_next_cpc(): number;
+  get_control_bus_next_wr(): number;
+  get_control_bus_next_alu0(): number;
+  get_control_bus_next_alu1(): number;
+  get_control_bus_next_mpx0(): number;
+  get_control_bus_next_mpx1(): number;
+  get_control_bus_next_selalu(): number;
 
   get_rom_pos(): number;
   get_processed_state(): number;
@@ -127,52 +129,56 @@ export function emptyMSCore(): MSCore & MSCoreExtension {
       throwUninitializedError("get_register_alu_rb");
     },
 
+    get_alu_output: () => {
+      throwUninitializedError("get_alu_output");
+    },
+
     get_data_bus: () => {
       throwUninitializedError("get_data_bus");
     },
 
-    get_control_bus_cfz: () => {
-      throwUninitializedError("get_control_bus_cfz");
+    get_control_bus_next_cfz: () => {
+      throwUninitializedError("get_control_bus_next_cfz");
     },
 
-    get_control_bus_cb: () => {
-      throwUninitializedError("get_control_bus_cb");
+    get_control_bus_next_cb: () => {
+      throwUninitializedError("get_control_bus_next_cb");
     },
 
-    get_control_bus_ca: () => {
-      throwUninitializedError("get_control_bus_ca");
+    get_control_bus_next_ca: () => {
+      throwUninitializedError("get_control_bus_next_ca");
     },
 
-    get_control_bus_cri: () => {
-      throwUninitializedError("get_control_bus_cri");
+    get_control_bus_next_cri: () => {
+      throwUninitializedError("get_control_bus_next_cri");
     },
 
-    get_control_bus_cpc: () => {
-      throwUninitializedError("get_control_bus_cpc");
+    get_control_bus_next_cpc: () => {
+      throwUninitializedError("get_control_bus_next_cpc");
     },
 
-    get_control_bus_wr: () => {
-      throwUninitializedError("get_control_bus_wr");
+    get_control_bus_next_wr: () => {
+      throwUninitializedError("get_control_bus_next_wr");
     },
 
-    get_control_bus_alu0: () => {
-      throwUninitializedError("get_control_bus_alu0");
+    get_control_bus_next_alu0: () => {
+      throwUninitializedError("get_control_bus_next_alu0");
     },
 
-    get_control_bus_alu1: () => {
-      throwUninitializedError("get_control_bus_alu1");
+    get_control_bus_next_alu1: () => {
+      throwUninitializedError("get_control_bus_next_alu1");
     },
 
-    get_control_bus_mpx0: () => {
-      throwUninitializedError("get_control_bus_mpx0");
+    get_control_bus_next_mpx0: () => {
+      throwUninitializedError("get_control_bus_next_mpx0");
     },
 
-    get_control_bus_mpx1: () => {
-      throwUninitializedError("get_control_bus_mpx1");
+    get_control_bus_next_mpx1: () => {
+      throwUninitializedError("get_control_bus_next_mpx1");
     },
 
-    get_control_bus_selalu: () => {
-      throwUninitializedError("get_control_bus_selalu");
+    get_control_bus_next_selalu: () => {
+      throwUninitializedError("get_control_bus_next_selalu");
     },
 
     run_clock_cycle: () => {

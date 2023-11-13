@@ -13,7 +13,7 @@ const initialEdges: Edge[] = [
       height: 50,
       type: MarkerType.Arrow,
     },
-    sourceHandle: "databus-bottom-source-10",
+    sourceHandle: "databus-bottom-source-8",
   },
   {
     id: "databus-memory",
@@ -26,7 +26,7 @@ const initialEdges: Edge[] = [
       height: 50,
       type: MarkerType.Arrow,
     },
-    sourceHandle: "databus-bottom-source-80",
+    sourceHandle: "databus-bottom-source-22",
   },
   {
     id: "memory-databus",
@@ -39,7 +39,7 @@ const initialEdges: Edge[] = [
       height: 80,
       type: MarkerType.Arrow,
     },
-    targetHandle: "databus-bottom-target-90",
+    targetHandle: "databus-bottom-target-37.1",
   },
   {
     id: "databus-pc",
@@ -52,7 +52,7 @@ const initialEdges: Edge[] = [
       height: 50,
       type: MarkerType.Arrow,
     },
-    sourceHandle: "databus-top-source-5",
+    sourceHandle: "databus-bottom-source-5",
   },
   {
     id: "databus-ra",
@@ -65,8 +65,8 @@ const initialEdges: Edge[] = [
       height: 50,
       type: MarkerType.Arrow,
     },
-    sourceHandle: "databus-top-source-45",
-    targetHandle: 'RA-bottom-target-70'
+    sourceHandle: "databus-bottom-source-65",
+    targetHandle: 'RA-top-target-70'
   },
   {
     id: "databus-rb",
@@ -79,8 +79,8 @@ const initialEdges: Edge[] = [
       height: 50,
       type: MarkerType.Arrow,
     },
-    sourceHandle: "databus-top-source-72",
-    targetHandle: 'RB-bottom-target-70'
+    sourceHandle: "databus-bottom-source-88",
+    targetHandle: 'RB-top-target-70'
   },
   {
     id: "RA-alu",
@@ -94,7 +94,7 @@ const initialEdges: Edge[] = [
       type: MarkerType.Arrow,
     },
     label: "A",
-    sourceHandle: "RA-top-source-70",
+    sourceHandle: "RA-bottom-source-70",
     targetHandle: 'alu-input-A'
   },
   {
@@ -109,7 +109,7 @@ const initialEdges: Edge[] = [
       type: MarkerType.Arrow,
     },
     label: "B",
-    sourceHandle: "RB-top-source-30",
+    sourceHandle: "RB-bottom-source-30",
     targetHandle: 'alu-input-B'
   },
   {

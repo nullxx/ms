@@ -19,12 +19,15 @@ const columns = [
     dataIndex: 'name',
     key: 'name',
     align: 'center' as const,
+    ellipsis: true,
+    width: 100,
   },
   {
     title: <I18n k="variables.variableAddress" />,
     dataIndex: 'address',
     key: 'address',
     align: 'center' as const,
+    width: 100,
   },
   {
     title: <I18n k="variables.variableValue" />,
@@ -87,6 +90,7 @@ const VariablesNode = ({ data }: { data: any }) => {
       style={{
         padding: 10,
         backgroundColor: "#f5f5f5",
+        width: 415,
       }}
       className="pretty-shadow"
     >

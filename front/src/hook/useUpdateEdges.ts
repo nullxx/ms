@@ -16,6 +16,9 @@ export default function useUpdateEdges({
   const reactFlowInstance = useReactFlow();
   const allEdges = useEdges();
 
+  const [controlBusBitLoadLabel, setControlBusBitLoadLabel] = React.useState(data?.controlBusBitLoad?.label ? { name: data.controlBusBitLoad.label, value: 0 } : undefined);
+  const [controlBusBitReleaseLabel, setControlBusBitReleaseLabel] = React.useState(data?.controlBusBitRelease?.label ? { name: data.controlBusBitRelease.label, value: 0 } : undefined);
+
   function onUIUpdate() {
     if (data.controlBusBitLoad) {
       const controlBusBitLoadValue = execute(
@@ -25,7 +28,12 @@ export default function useUpdateEdges({
       const targetEdge = allEdges.find((edge) => edge.target === id);
       if (!targetEdge) return;
 
-      targetEdge.label = `${data.controlBusBitLoad.label}: ${controlBusBitLoadValue}`;
+      // targetEdge.label = `${data.controlBusBitLoad.label}: ${controlBusBitLoadValue}`;
+      setControlBusBitLoadLabel({
+        name: data.controlBusBitLoad.label,
+        value: controlBusBitLoadValue,
+      });
+
       let stokeColor = undefined;
       if (controlBusBitLoadValue === 1) {
         targetEdge.animated = true;
@@ -53,7 +61,11 @@ export default function useUpdateEdges({
       const sourceEdge = allEdges.find((edge) => edge.source === id);
       if (!sourceEdge) return;
 
-      sourceEdge.label = `${data.controlBusBitRelease.label}: ${controlBusBitReleaseValue}`;
+      // sourceEdge.label = `${data.controlBusBitRelease.label}: ${controlBusBitReleaseValue}`;
+      setControlBusBitReleaseLabel({
+        name: data.controlBusBitRelease.label,
+        value: controlBusBitReleaseValue,
+      });
 
       const allEdgesEdited = allEdges.map((edge) => {
         if (edge.id === sourceEdge.id) {
@@ -73,4 +85,6 @@ export default function useUpdateEdges({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  return [controlBusBitLoadLabel, controlBusBitReleaseLabel];
 }

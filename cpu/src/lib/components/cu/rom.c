@@ -27,9 +27,19 @@ static Bus_t *actual_status_Q2_bus = NULL;
 static Bus_t *actual_status_Q1_bus = NULL;
 static Bus_t *actual_status_Q0_bus = NULL;
 
+static Bus_t *next_status_Q2_bus = NULL;
+static Bus_t *next_status_Q1_bus = NULL;
+static Bus_t *next_status_Q0_bus = NULL;
+
 static PubSubSubscription *actual_status_Q2_subscription = NULL;
 static PubSubSubscription *actual_status_Q1_subscription = NULL;
 static PubSubSubscription *actual_status_Q0_subscription = NULL;
+
+static PubSubSubscription *d2_bus_topic_subscription = NULL;
+static PubSubSubscription *d1_bus_topic_subscription = NULL;
+static PubSubSubscription *d0_bus_topic_subscription = NULL;
+
+static PubSubMiddleware *calc_next_status_mddl = NULL;
 
 const int ROM[CU_SIGNAL_ROWS_COUNT][CU_SIGNAL_COLS_COUNT] = {
     // this are the signals
@@ -49,17 +59,54 @@ const int ROM[CU_SIGNAL_ROWS_COUNT][CU_SIGNAL_COLS_COUNT] = {
     // {X, X, X, X, X, X, 1, 0, X, X, 0, 0, 0, 0, 1, 0}, // S3
 };
 
+// this is a "guarrada". For syncronitation purposes, we need to calculate the next status with the middleware, as in the CU the run_cu_rom() (func. that is in this file) is called before the run_cu_seq()
+static int calc_next_status(Word next_d0)
+{
+    Word w;
+    initialize_word(&w, 0);
+    w.bits[2] = next_status_Q2_bus->next_value.bits[0];
+    w.bits[1] = next_status_Q1_bus->next_value.bits[0];
+    w.bits[0] = next_d0.bits[0];
+
+    unsigned int rom_pos = word_to_int(w);
+    log_debug("ROM pos: %d", rom_pos);
+
+    if (rom_pos < 0 || rom_pos > CU_SIGNAL_ROWS_COUNT)
+        return 1;
+
+    Word to_send2;
+    initialize_word(&to_send2, 0);
+
+    for (int i = 0; i < CU_SIGNAL_COLS_COUNT; i++)
+    {
+        to_send2.bits[CU_SIGNAL_COLS_COUNT - 1 - i] = ROM[rom_pos][i];
+    }
+
+    publish_message_to(CONTROL_BUS_TOPIC_NEXT, to_send2);
+
+    return true;
+}
+
 void init_cu_rom(void)
 {
     actual_status_Q2_bus = create_bus_data();
     actual_status_Q1_bus = create_bus_data();
     actual_status_Q0_bus = create_bus_data();
 
+    next_status_Q2_bus = create_bus_data();
+    next_status_Q1_bus = create_bus_data();
+    next_status_Q0_bus = create_bus_data();
+
     actual_status_Q2_subscription = subscribe_to(CU_SEQ_ACTUAL_STATUS_Q2_BUS_TOPIC, actual_status_Q2_bus);
     actual_status_Q1_subscription = subscribe_to(CU_SEQ_ACTUAL_STATUS_Q1_BUS_TOPIC, actual_status_Q1_bus);
     actual_status_Q0_subscription = subscribe_to(CU_SEQ_ACTUAL_STATUS_Q0_BUS_TOPIC, actual_status_Q0_bus);
-}
 
+    d2_bus_topic_subscription = subscribe_to(CU_SEQ_OUTPUT_D2_BUS_TOPIC, next_status_Q2_bus);
+    d1_bus_topic_subscription = subscribe_to(CU_SEQ_OUTPUT_D1_BUS_TOPIC, next_status_Q1_bus);
+    d0_bus_topic_subscription = subscribe_to(CU_SEQ_OUTPUT_D0_BUS_TOPIC, next_status_Q0_bus);
+
+    calc_next_status_mddl = add_topic_middleware(CU_SEQ_OUTPUT_D0_BUS_TOPIC, calc_next_status);
+}
 
 void run_cu_rom(void)
 {
@@ -97,7 +144,17 @@ void shutdown_cu_rom(void)
     unsubscribe_for(actual_status_Q1_subscription);
     unsubscribe_for(actual_status_Q0_subscription);
 
+    unsubscribe_for(d2_bus_topic_subscription);
+    unsubscribe_for(d1_bus_topic_subscription);
+    unsubscribe_for(d0_bus_topic_subscription);
+
     destroy_bus_data(actual_status_Q2_bus);
     destroy_bus_data(actual_status_Q1_bus);
     destroy_bus_data(actual_status_Q0_bus);
+
+    destroy_bus_data(next_status_Q2_bus);
+    destroy_bus_data(next_status_Q1_bus);
+    destroy_bus_data(next_status_Q0_bus);
+
+    rm_topic_middleware(calc_next_status_mddl);
 }

@@ -20,10 +20,14 @@ const DEFAULT_SELALU_VALUE = 0;
 
 export default function ALUNode({ data, id }: any) {
   const [selAlu, setSelAlu] = useState(DEFAULT_SELALU_VALUE);
+  const [aluOutput, setAluOutput] = useState(0);
 
   function onUIUpdate() {
-    const selAlu = execute<number>("get_control_bus_selalu");
+    const selAlu = execute<number>("get_control_bus_next_selalu");
     setSelAlu(selAlu);
+
+    const aluOutput = execute<number>("get_alu_output");
+    setAluOutput(aluOutput);
   }
 
   useEffect(() => {
@@ -39,7 +43,7 @@ export default function ALUNode({ data, id }: any) {
       <Handle
         id={`${id}-input-A`}
         type="target"
-        position={Position.Bottom}
+        position={Position.Top}
         style={{
           background: "#555",
           position: "absolute",
@@ -51,7 +55,7 @@ export default function ALUNode({ data, id }: any) {
       <Handle
         id={`${id}-input-B`}
         type="target"
-        position={Position.Bottom}
+        position={Position.Top}
         style={{
           background: "#555",
           position: "absolute",
@@ -92,7 +96,7 @@ export default function ALUNode({ data, id }: any) {
         <Col display="flex">
           <NumberBaseInput
             initialBase="HEX"
-            number={selAlu}
+            number={aluOutput}
             width={153}
             readOnly
           />
