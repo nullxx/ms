@@ -54,3 +54,15 @@ export function useTextFile(initialContent?: string) {
 
   return { downloadFile: download, openFile: open };
 }
+
+export function doHeavyWork<T = unknown>(fn: () => (T | Promise<T>)) {
+  return new Promise<T>((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        resolve(await fn());
+      } catch (e) {
+        reject(e);
+      }
+    }, 100);
+  });
+}

@@ -8,6 +8,7 @@ export default function IconButton({
   onClick,
   disabled,
   animate = true,
+  loading,
   type = 'primary',
   danger
 }: {
@@ -16,6 +17,7 @@ export default function IconButton({
   onClick?: () => void;
   disabled?: boolean;
   animate?: boolean;
+  loading?: boolean;
   hidden?: boolean;
   type?: ButtonType;
   danger?: boolean;
@@ -23,6 +25,7 @@ export default function IconButton({
   return (
     <Button
       style={animate ? { animation: animations.fadeIn } : {}}
+      loading={loading}
       type={type}
       icon={icon}
       size="large"

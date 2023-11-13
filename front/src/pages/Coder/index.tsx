@@ -7,6 +7,7 @@ import { CodeOutlined, SaveOutlined, CloseOutlined } from "@ant-design/icons";
 import ResizeDrawer from "./components/ResizeDrawer";
 import { useEffect } from "react";
 import I18n, { useI18n } from "../../components/i18n";
+import { doHeavyWork } from "../../lib/utils";
 
 
 const Coder: React.FC = () => {
@@ -18,6 +19,7 @@ const Coder: React.FC = () => {
   const [initOffset, setInitOffset] = useState(0);
   const [slots, setSlots] = useState<string[]>([]);
   const [maximize, setMaximize] = useState(false);
+  const [isSavingToMem, setIsSavingToMem] = useState(false);
 
   const modalStyles = {
     mask: {
@@ -33,13 +35,18 @@ const Coder: React.FC = () => {
     setVisible(false);
   };
 
-  const handleSaveToMemory = () => {
-    getCore().reset_control(); // reset the control to start from the beginning
+  const handleSaveToMemory = async () => {
+    setIsSavingToMem(true);
+    await doHeavyWork(() => {
+      getCore().reset_control(); // reset the control to start from the beginning
 
-    for (let i = 0; i < slots.length; i++) {
-      const slot = slots[i];
-      getCore().set_memory_value(initOffset + i, parseInt(slot, 2));
-    }
+      for (let i = 0; i < slots.length; i++) {
+        const slot = slots[i];
+        getCore().set_memory_value(initOffset + i, parseInt(slot, 2));
+      }
+    });
+
+    setIsSavingToMem(false);
     onClose();
   };
 
@@ -96,8 +103,9 @@ const Coder: React.FC = () => {
               icon={<SaveOutlined />}
               type="primary"
               onClick={handleSaveToMemory}
-              disabled={!canSaveToMem}
+              disabled={!canSaveToMem || isSavingToMem}
               title={useI18n('words.save')}
+              loading={isSavingToMem}
             />
           </Space>
         }
