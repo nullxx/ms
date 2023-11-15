@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Row, Col, Text } from "atomize";
 import { Alert, Tooltip } from "antd";
 
@@ -130,7 +130,7 @@ function DebuggerComponent({
   );
 }
 
-const DebuggerNode = ({ data }: { data: any }) => {
+const DebuggerNode = memo(({ data }: { data: any }) => {
   const [searchValue, setSearchValue] = React.useState(0);
   const [offsetPadding, setOffsetPadding] = React.useState(10);
   const [base, setBase] = React.useState<Base>("DEC");
@@ -201,6 +201,8 @@ const DebuggerNode = ({ data }: { data: any }) => {
       </Row>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+});
 
 export default DebuggerNode;

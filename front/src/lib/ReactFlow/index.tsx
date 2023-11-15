@@ -9,7 +9,6 @@ export interface Point {
   y: number;
 }
 
-const positions = {};
 function Flow({
   nodes,
   edges,
@@ -45,10 +44,6 @@ function Flow({
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
       connectionLineComponent={connectionLineComponent}
-      onNodeDrag={(event, node) => {
-        console.log("onNodeDrag", node);
-        (positions as any)[node.id] = node.position;
-      }}
     >
       <Background />
       <Controls showInteractive={false} />

@@ -1,6 +1,6 @@
 
 
-import React from "react";
+import React, { memo } from "react";
 import { unsubscribeToUIUpdates } from "../../../lib/core";
 import { Row, Col, Text } from "atomize";
 import { subscribeToUIUpdates, getCore } from "../../../lib/core/index";
@@ -54,7 +54,7 @@ async function renderAutomata(node: HTMLElement, text: string = baseDiagram) {
 
 }
 
-export default function AutomataNode({ data }: { data: any }) {
+export default memo(function AutomataNode({ data }: { data: any }) {
     const mermaidContainerRef = React.useRef<HTMLDivElement>(null);
 
     async function onUIUpdate(this: any) {
@@ -93,7 +93,6 @@ export default function AutomataNode({ data }: { data: any }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
     return (
         <div
             style={{
@@ -119,4 +118,6 @@ export default function AutomataNode({ data }: { data: any }) {
             </Row>
         </div>
     );
-}
+}, (prevProps, nextProps) => {
+    return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+});

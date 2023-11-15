@@ -1,6 +1,6 @@
 import { Checkbox, Tooltip } from "antd";
 import { Row, Col, Text } from "atomize";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { Handle, Position } from "react-flow-renderer";
 import I18n from "../../../components/i18n";
 import {
@@ -9,7 +9,7 @@ import {
   unsubscribeToUIUpdates,
 } from "../../../lib/core";
 
-export default function FlagsNode({ data, id }: any) {
+export default memo(function FlagsNode({ data, id }: any) {
   const [fz, setFz] = useState(false);
   const [changed, setChanged] = useState(false);
 
@@ -86,4 +86,6 @@ export default function FlagsNode({ data, id }: any) {
       </Row>
     </div>
   );
-}
+}, (prevProps, nextProps) => {
+  return false;
+});

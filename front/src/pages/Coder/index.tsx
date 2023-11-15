@@ -22,9 +22,9 @@ const Coder: React.FC = () => {
   const [isSavingToMem, setIsSavingToMem] = useState(false);
 
   const modalStyles = {
-    mask: {
-      backdropFilter: 'blur(10px)',
-    },
+    // mask: {
+    //   backdropFilter: 'blur(10px)',
+    // },
   };
 
   const showDefaultDrawer = () => {
@@ -115,9 +115,7 @@ const Coder: React.FC = () => {
         maskClosable={false}
         closeIcon={null}
         width={maximize ? "95%" : undefined}
-        styles={{
-          mask: modalStyles.mask,
-        }}
+        styles={modalStyles}
         centered
 
       >

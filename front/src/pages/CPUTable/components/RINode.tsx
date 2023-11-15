@@ -103,4 +103,6 @@ export default memo(({ data, id }: any) => {
       </Row>
     </div>
   );
+}, (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
 });

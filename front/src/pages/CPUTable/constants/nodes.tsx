@@ -7,7 +7,7 @@ const nodes: Node[] = [
       "x": -352,
       "y": -365
     },
-    "draggable": true,
+    "draggable": false,
     "type": "registerNode",
     "data": {
       "labelKey": "ra.label",
@@ -31,7 +31,7 @@ const nodes: Node[] = [
       "x": -162,
       "y": -368
     },
-    "draggable": true,
+    "draggable": false,
     "type": "registerNode",
     "data": {
       "labelKey": "rb.label",
@@ -55,7 +55,7 @@ const nodes: Node[] = [
       "x": -904,
       "y": -315
     },
-    "draggable": true,
+    "draggable": false,
     "type": "registerNode",
     "data": {
       "labelKey": "pc.label",
@@ -81,7 +81,7 @@ const nodes: Node[] = [
       "width": 440,
       "height": 200
     },
-    "draggable": true,
+    "draggable": false,
     "position": {
       x: -756, y: -162
     },
@@ -96,7 +96,7 @@ const nodes: Node[] = [
       "y": 40
     },
     "parentNode": "8",
-    "draggable": true,
+    "draggable": false,
     "type": "riNode",
     "data": {
       "labelKey": "ri.label",
@@ -122,7 +122,7 @@ const nodes: Node[] = [
       "y": 125
     },
     "parentNode": "8",
-    "draggable": true,
+    "draggable": false,
     "type": "registerNode",
     "data": {
       "labelKey": "state.label",
@@ -139,7 +139,7 @@ const nodes: Node[] = [
       "y": -356
     },
     "type": "memoryNode",
-    "draggable": true,
+    "draggable": false,
     "data": {
       "labelKey": "memory.label",
       "readOnly": false,
@@ -156,7 +156,7 @@ const nodes: Node[] = [
     "data": {
       "labelKey": "transitionstate.label"
     },
-    "draggable": true
+    "draggable": false
   },
   {
     "id": "debugger",
@@ -168,7 +168,7 @@ const nodes: Node[] = [
     "data": {
       "labelKey": "debugger.label"
     },
-    "draggable": true
+    "draggable": false
   },
   {
     "id": "variables",
@@ -179,14 +179,14 @@ const nodes: Node[] = [
     "data": {
       "labelKey": "variables.label"
     },
-    "draggable": true
+    "draggable": false
   },
   {
     "id": "flags",
     "position": {
       x: 4, y: -235
     },
-    "draggable": true,
+    "draggable": false,
     "type": "flagsNode",
     "data": {
       "labelKey": "flags.label",
@@ -201,7 +201,7 @@ const nodes: Node[] = [
       "x": -1030,
       "y": -455
     },
-    "draggable": true,
+    "draggable": false,
     "type": "cycleTimeNode",
     "data": {
       "labelKey": "clockCycleTime.label"
@@ -212,7 +212,7 @@ const nodes: Node[] = [
     "position": {
       x: -280, y: -244
     },
-    "draggable": true,
+    "draggable": false,
     "type": "aluNode",
     "data": {
       "labelKey": "alu.label",
@@ -228,7 +228,7 @@ const nodes: Node[] = [
       "x": -758,
       "y": -456
     },
-    "draggable": true,
+    "draggable": false,
     "type": "busNode",
     "data": {
       "labelKey": "databus.label",
@@ -241,7 +241,7 @@ const nodes: Node[] = [
     "position": {
       x: 134, y: -458
     },
-    "draggable": true,
+    "draggable": false,
     "type": "automataNode",
     "data": {
       "labelKey": "automata.label",

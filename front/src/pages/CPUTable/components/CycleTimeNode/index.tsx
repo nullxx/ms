@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   subscribeToUIUpdates,
   unsubscribeToUIUpdates,
@@ -12,7 +12,7 @@ import I18n from "../../../../components/i18n";
 
 const maxTimeMS = 7;
 
-export default function CycleTimeNode({ data }: any) {
+export default memo(function CycleTimeNode({ data }: any) {
   const [lastCycleTime, setLastCycleTime] = React.useState(clockCycleTime);
 
   function onUIUpdate() {
@@ -56,4 +56,6 @@ export default function CycleTimeNode({ data }: any) {
       </Tooltip>
     </div>
   );
-}
+}, (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+});

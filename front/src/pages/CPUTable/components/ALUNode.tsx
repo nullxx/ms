@@ -1,6 +1,6 @@
 import { Row, Col, Text } from "atomize";
 import NumberBaseInput from "../../../components/NumberBaseInput";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import {
   execute,
   subscribeToUIUpdates,
@@ -18,7 +18,7 @@ enum SelAluOp {
 
 const DEFAULT_SELALU_VALUE = 0;
 
-export default function ALUNode({ data, id }: any) {
+export default memo(function ALUNode({ data, id }: any) {
   const [selAlu, setSelAlu] = useState(DEFAULT_SELALU_VALUE);
   const [aluOutput, setAluOutput] = useState(0);
 
@@ -105,4 +105,6 @@ export default function ALUNode({ data, id }: any) {
       </Row>
     </div>
   );
-}
+}, (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+});

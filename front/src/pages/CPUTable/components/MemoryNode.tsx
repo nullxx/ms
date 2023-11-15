@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Row, Col, Text } from "atomize";
 
 import NumberBaseInput, { getRadix } from "../../../components/NumberBaseInput";
@@ -17,7 +17,7 @@ import { Handle, Position } from "react-flow-renderer";
 import useUpdateEdges from "../../../hook/useUpdateEdges";
 import I18n from "../../../components/i18n";
 
-function MemoryComponentRow({
+const MemoryComponentRow = memo(function MemoryComponentRow({
   offset,
   value,
   style,
@@ -39,7 +39,9 @@ function MemoryComponentRow({
       </Col>
     </Row>
   );
-}
+}, (prevProps, nextProps) => {
+  return prevProps.offset === nextProps.offset && prevProps.value === nextProps.value && prevProps.valueBaseRadix === nextProps.valueBaseRadix;
+});
 
 function MemoryComponent({ offset, base }: { offset: number; base: Base }) {
   const radix = getRadix(base);
@@ -89,7 +91,7 @@ function MemoryComponent({ offset, base }: { offset: number; base: Base }) {
   );
 }
 
-const MemoryNode = ({ data, id }: { data: any; id: string }) => {
+const MemoryNode = memo(({ data, id }: { data: any; id: string }) => {
   const [searchValue, setSearchValue] = React.useState(0);
   const [base, setBase] = React.useState<Base>("HEX");
   const [LE, setLE] = React.useState(1); // deafult reading
@@ -177,6 +179,8 @@ const MemoryNode = ({ data, id }: { data: any; id: string }) => {
       </Row>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+});
 
 export default MemoryNode;

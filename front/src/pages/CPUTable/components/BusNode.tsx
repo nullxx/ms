@@ -152,4 +152,6 @@ export default memo(({ data, isConnectable, id }: any) => {
       ))}
     </div>
   );
+}, (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
 });

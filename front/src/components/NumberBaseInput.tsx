@@ -1,6 +1,6 @@
 import { Input, Select, Modal, Tooltip, Button } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { memo } from "react";
 import { Base, bases, prefixes } from "../constants/bases";
 import I18n from "./i18n";
 const { Option } = Select;
@@ -33,7 +33,7 @@ const validateNumberBase = (number: string, base: Base) => {
   return targetBase.regex.test(number);
 };
 
-const NumberBaseInput = ({
+const NumberBaseInput = memo(({
   number,
   initialBase,
   onChange,
@@ -142,7 +142,15 @@ const NumberBaseInput = ({
       )}
     </Tooltip>
   );
-};
+}, (prevProps, nextProps) => {
+  return prevProps.number === nextProps.number
+    && prevProps.initialBase === nextProps.initialBase
+    && prevProps.readOnly === nextProps.readOnly
+    && prevProps.width === nextProps.width
+    && prevProps.isError === nextProps.isError
+    && prevProps.max === nextProps.max
+    && prevProps.disabled === nextProps.disabled
+});
 
 const MoreInfoModal = ({ number, visible, onClose }: { number: number, visible: boolean, onClose: () => void }) => {
 
@@ -163,16 +171,16 @@ const MoreInfoModal = ({ number, visible, onClose }: { number: number, visible: 
     footer={null}
     centered
     styles={{
-      mask: {
-        backdropFilter: 'blur(5px)'
-      }
+      // mask: {
+      //   backdropFilter: 'blur(5px)'
+      // }
     }}
   >
     {/* display all bases */}
     {bases.map(({ base, radix }) => (
       <>
         <Input
-
+          key={number + base}
           addonBefore={base}
           addonAfter={
             <Tooltip

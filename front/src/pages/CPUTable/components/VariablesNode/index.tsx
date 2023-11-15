@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Row, Col, Text } from "atomize";
 import { Table } from "antd";
 
@@ -84,7 +84,7 @@ function VariablesComponent() {
   );
 }
 
-const VariablesNode = ({ data }: { data: any }) => {
+const VariablesNode = memo(({ data }: { data: any }) => {
   return (
     <div
       style={{
@@ -109,6 +109,8 @@ const VariablesNode = ({ data }: { data: any }) => {
       </Row>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+});
 
 export default VariablesNode;
