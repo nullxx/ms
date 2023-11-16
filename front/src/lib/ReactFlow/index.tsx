@@ -1,3 +1,4 @@
+import { memo } from "react";
 import ReactFlow, {
   Background,
   Controls,
@@ -52,7 +53,20 @@ function Flow({
   );
 }
 
-export default Flow;
+export default memo(Flow, (prev, next) => {
+  return (
+    JSON.stringify(prev.nodes) === JSON.stringify(next.nodes) &&
+    JSON.stringify(prev.edges) === JSON.stringify(next.edges) &&
+    prev.onNodesChange === next.onNodesChange &&
+    prev.onEdgesChange === next.onEdgesChange &&
+    prev.onConnect === next.onConnect &&
+    prev.fitView === next.fitView &&
+    prev.fitViewOptions === next.fitViewOptions &&
+    prev.nodeTypes === next.nodeTypes &&
+    prev.edgeTypes === next.edgeTypes &&
+    prev.connectionLineComponent === next.connectionLineComponent
+  );
+});
 
 export {
   applyEdgeChanges,

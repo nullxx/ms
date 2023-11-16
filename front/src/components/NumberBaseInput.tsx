@@ -1,6 +1,6 @@
 import { Input, Select, Modal, Tooltip, Button } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import { Base, bases, prefixes } from "../constants/bases";
 import I18n from "./i18n";
 const { Option } = Select;
@@ -96,7 +96,7 @@ const NumberBaseInput = memo(({
     setFormatted(newValue);
   };
 
-  const selectBefore = (
+  const selectBefore = useMemo(() => (
     <Select value={base} onChange={handleBaseChange} disabled={disabled}>
       {bases.map(({ base, radix }) => (
         <Option key={base} value={base}>
@@ -105,7 +105,7 @@ const NumberBaseInput = memo(({
         </Option>
       ))}
     </Select>
-  );
+  ), [base, disabled, handleBaseChange]);
 
   const handleVisibleChange = (visible: boolean) => {
     setVisible(visible);
