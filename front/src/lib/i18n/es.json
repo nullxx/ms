@@ -107,5 +107,7 @@
   "invalidNumber": "Número inválido",
   "breakpointReached": "Se ha alcanzado un breakpoint",
   "cannotSetBreakpoint": "No puedes poner un breakpoint ahí",
-  "automata.label": "Autómata"
+  "automata.label": "Autómata",
+  "mx.label": "MX",
+  "inc.label": ""
 }

@@ -147,6 +147,19 @@ const MemoryNode = memo(({ data, id }: { data: any; id: string }) => {
         onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={false}
       />
+
+      <Handle
+        id="mem-dir"
+        type="target"
+        position={Position.Bottom}
+        style={{
+          background: "#555",
+          position: "absolute",
+          left: "50%",
+        }}
+        isConnectable={false}
+      />
+
       <Row>
         <Col>
           <Tooltip title={<I18n k={data.helpInfoKey} />} className="tooltip">

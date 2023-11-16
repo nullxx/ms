@@ -4,8 +4,7 @@ const nodes: Node[] = [
   {
     "id": "RA",
     "position": {
-      "x": -352,
-      "y": -365
+      x: -212, y: -701
     },
     "draggable": false,
     "type": "registerNode",
@@ -18,7 +17,7 @@ const nodes: Node[] = [
         "bottom-source-50",
         "top-target-70"
       ],
-      "handlesCount": 2,
+
       "controlBusBitLoad": {
         "label": "CCA",
         "getFunction": "get_control_bus_next_ca"
@@ -28,8 +27,7 @@ const nodes: Node[] = [
   {
     "id": "RB",
     "position": {
-      "x": -162,
-      "y": -368
+      x: -23, y: -701
     },
     "draggable": false,
     "type": "registerNode",
@@ -42,7 +40,7 @@ const nodes: Node[] = [
         "bottom-source-50",
         "top-target-70"
       ],
-      "handlesCount": 2,
+
       "controlBusBitLoad": {
         "label": "CCB",
         "getFunction": "get_control_bus_next_cb"
@@ -52,8 +50,7 @@ const nodes: Node[] = [
   {
     "id": "pc",
     "position": {
-      "x": -904,
-      "y": -315
+      x: -763, y: -421
     },
     "draggable": false,
     "type": "registerNode",
@@ -61,9 +58,11 @@ const nodes: Node[] = [
       "labelKey": "pc.label",
       "readOnly": true,
       "handlePos": [
-        "top-target-70"
+        "top-target-70",
+        "right-target-50",
+        "bottom-source-50",
       ],
-      "handlesCount": 1,
+
       "width": 70,
       "height": 63,
       "controlBusBitLoad": {
@@ -83,7 +82,7 @@ const nodes: Node[] = [
     },
     "draggable": false,
     "position": {
-      x: -756, y: -162
+      x: -1121, y: -677
     },
     "className": "light",
     "type": "loadableNode",
@@ -104,9 +103,11 @@ const nodes: Node[] = [
       "width": 70,
       "height": 63,
       "handlePos": [
-        "top-target-10"
+        "top-target-10",
+        "top-source-5",
+        "top-source-10"
       ],
-      "handlesCount": 1,
+
       "controlBusBitLoad": {
         "label": "CRI",
         "getFunction": "get_control_bus_next_cri"
@@ -135,8 +136,7 @@ const nodes: Node[] = [
   {
     "id": "memory",
     "position": {
-      "x": -671,
-      "y": -356
+      x: -489, y: -634
     },
     "type": "memoryNode",
     "draggable": false,
@@ -150,41 +150,40 @@ const nodes: Node[] = [
   {
     "id": "transition-state",
     "position": {
-      x: 453, y: -458
+      x: -1016, y: -421
     },
     "type": "stateTransition",
     "data": {
       "labelKey": "transitionstate.label"
     },
-    "draggable": false
+    "draggable": false,
   },
   {
     "id": "debugger",
     "position": {
-      "x": -1027,
-      "y": -229
+      x: 23, y: -463
     },
     "type": "debuggerNode",
     "data": {
       "labelKey": "debugger.label"
     },
-    "draggable": false
+    "draggable": false,
   },
   {
     "id": "variables",
     "position": {
-      x: -295, y: -135
+      x: 268, y: -464.00000000000006
     },
     "type": "variablesNode",
     "data": {
       "labelKey": "variables.label"
     },
-    "draggable": false
+    "draggable": false,
   },
   {
     "id": "flags",
     "position": {
-      x: 4, y: -235
+      x: 171, y: -565
     },
     "draggable": false,
     "type": "flagsNode",
@@ -198,8 +197,7 @@ const nodes: Node[] = [
   {
     "id": "clockCycleTime",
     "position": {
-      "x": -1030,
-      "y": -455
+      x: -624, y: -739
     },
     "draggable": false,
     "type": "cycleTimeNode",
@@ -210,7 +208,7 @@ const nodes: Node[] = [
   {
     "id": "alu",
     "position": {
-      x: -280, y: -244
+      x: -131, y: -574
     },
     "draggable": false,
     "type": "aluNode",
@@ -219,27 +217,26 @@ const nodes: Node[] = [
       "handlePos": [
         "top-target-50"
       ],
-      "handlesCount": 1
+
     }
   },
   {
     "id": "databus",
     "position": {
-      "x": -758,
-      "y": -456
+      x: -999, y: -814
     },
     "draggable": false,
     "type": "busNode",
     "data": {
       "labelKey": "databus.label",
-      "width": 800,
+      "width": 1200,
       "getFunction": "get_data_bus"
     }
   },
   {
     "id": "automata",
     "position": {
-      x: 134, y: -458
+      x: -295, y: -463
     },
     "draggable": false,
     "type": "automataNode",
@@ -247,6 +244,32 @@ const nodes: Node[] = [
       "labelKey": "automata.label",
       "width": 300,
       "height": 416
+    }
+  },
+  {
+    "id": "mx",
+    "position": {
+      x: -614, y: -329
+    },
+    "draggable": false,
+    "type": "mxNode",
+    "data": {
+      "labelKey": "mx.label",
+      "width": 180,
+      "height": 240
+    }
+  },
+  {
+    "id": "inc",
+    "position": {
+      x: -427, y: -421
+    },
+    "draggable": false,
+    "type": "incNode",
+    "data": {
+      "labelKey": "inc.label",
+      "width": 60,
+      "height": 60
     }
   }
 ];

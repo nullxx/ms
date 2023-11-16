@@ -26,7 +26,7 @@ const initialEdges: Edge[] = [
       height: 50,
       type: MarkerType.Arrow,
     },
-    sourceHandle: "databus-bottom-source-22",
+    sourceHandle: "databus-bottom-source-50",
   },
   {
     id: "memory-databus",
@@ -39,7 +39,7 @@ const initialEdges: Edge[] = [
       height: 80,
       type: MarkerType.Arrow,
     },
-    targetHandle: "databus-bottom-target-37.1",
+    targetHandle: "databus-bottom-target-60",
   },
   {
     id: "databus-pc",
@@ -52,7 +52,7 @@ const initialEdges: Edge[] = [
       height: 50,
       type: MarkerType.Arrow,
     },
-    sourceHandle: "databus-bottom-source-5",
+    sourceHandle: "databus-bottom-source-28",
   },
   {
     id: "databus-ra",
@@ -65,7 +65,7 @@ const initialEdges: Edge[] = [
       height: 50,
       type: MarkerType.Arrow,
     },
-    sourceHandle: "databus-bottom-source-65",
+    sourceHandle: "databus-bottom-source-76",
     targetHandle: 'RA-top-target-70'
   },
   {
@@ -79,7 +79,7 @@ const initialEdges: Edge[] = [
       height: 50,
       type: MarkerType.Arrow,
     },
-    sourceHandle: "databus-bottom-source-88",
+    sourceHandle: "databus-bottom-source-90",
     targetHandle: 'RB-top-target-70'
   },
   {
@@ -126,6 +126,96 @@ const initialEdges: Edge[] = [
     label: "FZ",
     sourceHandle: "alu-output-FZ",
     targetHandle: 'flags-input-FZ'
+  },
+  {
+    id: "pc-mx-01",
+    source: "pc",
+    target: "mx",
+    animated: false,
+    type: "smoothstep",
+    markerEnd: {
+      width: 50,
+      height: 50,
+      type: MarkerType.Arrow,
+    },
+    label: "PC",
+    sourceHandle: "pc-bottom-source-50",
+    targetHandle: 'mx-01'
+  },
+  {
+    id: "ri-mx-10",
+    source: "ri",
+    target: "mx",
+    animated: false,
+    type: "smoothstep",
+    markerEnd: {
+      width: 50,
+      height: 50,
+      type: MarkerType.Arrow,
+    },
+    label: "SRC",
+    sourceHandle: "ri-top-source-5",
+    targetHandle: 'mx-10'
+  },
+  {
+    id: "ri-mx-11",
+    source: "ri",
+    target: "mx",
+    animated: false,
+    type: "smoothstep",
+    markerEnd: {
+      width: 50,
+      height: 50,
+      type: MarkerType.Arrow,
+    },
+    label: "DST",
+    sourceHandle: "ri-top-source-10",
+    targetHandle: 'mx-11'
+  },
+  {
+    id: "mx-inc",
+    source: "mx",
+    target: "inc",
+    animated: false,
+    type: "smoothstep",
+    markerEnd: {
+      width: 50,
+      height: 50,
+      type: MarkerType.Arrow,
+    },
+    label: "PC",
+    sourceHandle: "mx-out",
+    targetHandle: 'inc-in'
+  },
+  {
+    id: "inc-pc",
+    source: "inc",
+    target: "pc",
+    animated: false,
+    type: "smoothstep",
+    markerEnd: {
+      width: 50,
+      height: 50,
+      type: MarkerType.Arrow,
+    },
+    label: "PC + 1",
+    sourceHandle: "inc-out",
+    targetHandle: 'pc-right-target-50'
+  },
+  {
+    id: "mx-memory",
+    source: "mx",
+    target: "memory",
+    animated: false,
+    type: "smoothstep",
+    markerEnd: {
+      width: 50,
+      height: 50,
+      type: MarkerType.Arrow,
+    },
+    label: "DIR",
+    sourceHandle: "mx-out",
+    targetHandle: 'mem-dir'
   },
 ];
 

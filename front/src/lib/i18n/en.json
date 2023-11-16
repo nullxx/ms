@@ -107,5 +107,7 @@
   "invalidNumber": "Invalid number",
   "breakpointReached": "Breakpoint reached",
   "cannotSetBreakpoint": "You cannot set a breakpoint there",
-  "automata.label": "Automata"
+  "automata.label": "Automata",
+  "mx.label": "MX",
+  "inc.label": ""
 }

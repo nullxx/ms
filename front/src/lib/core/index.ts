@@ -161,12 +161,7 @@ const exportedMethods: {
     typeArgs: [],
   },
   {
-    name: "get_control_bus_next_mpx0",
-    returnType: "number",
-    typeArgs: [],
-  },
-  {
-    name: "get_control_bus_next_mpx1",
+    name: "get_control_bus_next_mpx",
     returnType: "number",
     typeArgs: [],
   },

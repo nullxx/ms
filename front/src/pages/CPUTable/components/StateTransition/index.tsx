@@ -133,13 +133,7 @@ export default function StateTransition({ data }: { data: any }) {
       </Row>
       <Row>
         <Col>
-          {states.length > 0 ? (
-            <IconButton
-              icon={<DeleteOutlined />}
-              title="Clear"
-              onClick={handleClear}
-            />
-          ) : (
+          {states.length === 0 && (
             <sub><I18n k="transitionstates.noStates" /></sub>
           )}
         </Col>

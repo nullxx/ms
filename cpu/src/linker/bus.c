@@ -77,12 +77,16 @@ int get_control_bus_next_alu1(void) { return control_bus_next->next_value.bits[C
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE
 #endif
-int get_control_bus_next_mpx0(void) { return control_bus_next->next_value.bits[CONTROL_BUS_MPX0_BIT_POSITION]; }
+int get_control_bus_next_mpx(void) {
+    Word mpx;
+    initialize_word(&mpx, 0);
 
-#ifdef __EMSCRIPTEN__
-EMSCRIPTEN_KEEPALIVE
-#endif
-int get_control_bus_next_mpx1(void) { return control_bus_next->next_value.bits[CONTROL_BUS_MPX1_BIT_POSITION]; }
+    mpx.bits[0] = control_bus_next->next_value.bits[CONTROL_BUS_MPX0_BIT_POSITION];
+    mpx.bits[1] = control_bus_next->next_value.bits[CONTROL_BUS_MPX1_BIT_POSITION];
+
+    return word_to_int(mpx);
+}
+
 
 #ifdef __EMSCRIPTEN__
 EMSCRIPTEN_KEEPALIVE

@@ -35,8 +35,7 @@ export interface MSCore {
   get_control_bus_next_wr(): number;
   get_control_bus_next_alu0(): number;
   get_control_bus_next_alu1(): number;
-  get_control_bus_next_mpx0(): number;
-  get_control_bus_next_mpx1(): number;
+  get_control_bus_next_mpx(): number;
   get_control_bus_next_selalu(): number;
 
   get_rom_pos(): number;
@@ -169,12 +168,8 @@ export function emptyMSCore(): MSCore & MSCoreExtension {
       throwUninitializedError("get_control_bus_next_alu1");
     },
 
-    get_control_bus_next_mpx0: () => {
-      throwUninitializedError("get_control_bus_next_mpx0");
-    },
-
-    get_control_bus_next_mpx1: () => {
-      throwUninitializedError("get_control_bus_next_mpx1");
+    get_control_bus_next_mpx: () => {
+      throwUninitializedError("get_control_bus_next_mpx");
     },
 
     get_control_bus_next_selalu: () => {
