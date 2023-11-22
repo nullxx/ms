@@ -63,6 +63,6 @@ export function doHeavyWork<T = unknown>(fn: () => (T | Promise<T>)) {
       } catch (e) {
         reject(e);
       }
-    }, 100);
+    }, 200);
   });
 }

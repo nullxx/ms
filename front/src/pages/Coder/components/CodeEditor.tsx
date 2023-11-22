@@ -1,10 +1,5 @@
-// import AceEditor from "react-ace";
-// import "brace/ext/language_tools"; // after import react-ace
-// // import MSMode from "../MSMode";
-// import completer from "../Completer";
-
 import React, { useEffect } from "react";
-import Editor, { useMonaco } from '@monaco-editor/react';
+import Editor, { useMonaco, loader } from '@monaco-editor/react';
 import * as mc from 'monaco-editor';
 import { CompiledBitLine, parseInput } from '../../../lib/traslator';
 import type { Data, Fin, Instruction } from '../../../lib/traslator';
@@ -24,6 +19,10 @@ import CompletionProvider from "../CompletionProvider";
 import usePrev from "../../../hook/usePrev";
 
 const { Panel } = Collapse;
+
+loader.config({
+  monaco: mc,
+});
 
 let runningVariables: Data[] = [];
 let fin: Fin | null = null;
@@ -65,7 +64,6 @@ export default function CodeEditor({
   const [offsetValid, setOffsetValid] = React.useState<boolean>(true);
   const [editor, setEditor] = React.useState<mc.editor.IStandaloneCodeEditor>();
   const [instructions, setInstructions] = React.useState<Instruction[]>([]);
-  // const aceEditorRef = React.createRef<AceEditor>();
 
   const decorators = React.useRef<{ line: number; id: string; type: 'error' | 'breakpoint', originalId: string, address: number }[]>([]);
 
@@ -229,14 +227,6 @@ export default function CodeEditor({
       setTraslated(str);
     }
 
-    // const _annotations = [
-    //   ...res.bits.map((r) => ({
-    //     row: r.sourceCodeLine!,
-    //     column: 0,
-    //     type: "info",
-    //     text: `${r.bits.slice(0, 2)} ${r.bits.slice(2, 9)} ${r.bits.slice(9, 16)}`
-    //   })),
-    // ];
 
     decorators.current.filter((d) => d.type === 'error').forEach((d) => {
       removeDeltaDecorator(d);
@@ -245,30 +235,9 @@ export default function CodeEditor({
       res.errors.forEach((err) => {
         addDeltaDecorator({ line: err.line + 1, id: `error-${err.line + 1}`, type: 'error', className: 'line-error', gyrphMarginClassName: 'margin-error', hoverMessage: err.message, address: -1 });
       });
-      // prevErrorDecorators.current = (editor?.getModel()?.deltaDecorations(prevErrorDecorators.current, res.errors.map((err) => ({
-      //   range: {
-      //     startLineNumber: err.line + 1,
-      //     endLineNumber: err.line + 1,
-      //     startColumn: 1,
-      //     endColumn: 1,
-      //   },
-      //   options: {
-      //     className: 'line-error',
-      //     isWholeLine: true,
-      //     glyphMarginClassName: 'margin-error',
-      //     hoverMessage: { value: err.message },
-      //   }
-      // })) ?? []) as string[]);
     }
 
     if (res.variables.length > 0) {
-      // _annotations.push(...res.variables.map((r) => ({
-      //   row: r.sourceCodeLine!,
-      //   column: 0,
-      //   type: "info",
-      //   text: `'${r.name}' address: 0x${r.address.toString(16).toUpperCase()}`,
-      // })));
-
       runningVariables = res.variables;
     }
 
@@ -370,7 +339,6 @@ export default function CodeEditor({
         <Space direction="vertical" style={{ width: "100%" }}>
           <Editor
             height={maximized ? "50vh" : "200px"}
-            // defaultLanguage="javascript" 
             language="ms"
             defaultLanguage="ms"
             defaultValue="; :)"
@@ -388,37 +356,6 @@ export default function CodeEditor({
               setEditor(editor);
             }}
           />
-          {/* <AceEditor
-            onChange={onChange}
-            value={code}
-            name="code"
-            editorProps={{ $blockScrolling: false }}
-            ref={aceEditorRef}
-            setOptions={{
-              showLineNumbers: true,
-              firstLineNumber: 0,
-              fontSize: `${maximized ? "24" : "14"}px`,
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              showGutter: true,
-            }}
-            height={maximized ? "50vh" : "200px"}
-            width="unset"
-            mode="text"
-            annotations={annotations}
-            commands={[
-              {
-                name: "save",
-                bindKey: { win: "Ctrl-S", mac: "Cmd-S" },
-                exec: handleDownloadCode,
-              },
-              {
-                name: "open",
-                bindKey: { win: "Ctrl-O", mac: "Cmd-O" },
-                exec: handleOpenCode,
-              },
-            ]}
-          /> */}
 
           {!maximized && (
             <TranslatedEditor initOffset={initOffset} traslated={traslated} />
