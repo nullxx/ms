@@ -18,7 +18,7 @@ void test_unregister_watcher(RegisterWatcher *rw) {
 }
 
 void test_get_register(Register *pr) {
-    Register *r = get_register(WATCHER_TYPE_ACUM);
+    Register *r = get_register(WATCHER_TYPE_PC);
 
     assert_ptr_equal(r, pr);
 }
@@ -27,7 +27,7 @@ int main(void) {
     log_set_quiet(1);
 
     Register reg = {.bit_length = 1, .value = 1};
-    RegisterWatcher rw = {.type = WATCHER_TYPE_ACUM, .reg = &reg};
+    RegisterWatcher rw = {.type = WATCHER_TYPE_PC, .reg = &reg};
 
     test_register_watcher(&rw);
     test_get_register(&reg);

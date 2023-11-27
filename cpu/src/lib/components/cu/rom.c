@@ -68,7 +68,7 @@ static int calc_next_status(Word next_d0)
     w.bits[1] = next_status_Q1_bus->next_value.bits[0];
     w.bits[0] = next_d0.bits[0];
 
-    unsigned int rom_pos = word_to_int(w);
+    int rom_pos = word_to_int(w);
     log_debug("ROM pos: %d", rom_pos);
 
     if (rom_pos < 0 || rom_pos > CU_SIGNAL_ROWS_COUNT)
