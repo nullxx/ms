@@ -4,7 +4,7 @@ rm -rf docs
 
 mkdir -p docs
 
-echo "maquina-sencilla-docs.nullx.me" > docs/CNAME
+echo "ms-docs.nullx.me" > docs/CNAME
 
 npm run build --prefix _docs
 

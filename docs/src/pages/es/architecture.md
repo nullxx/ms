@@ -4,7 +4,7 @@ description: Arquitectura del simulador
 layout: ../../layouts/MainLayout.astro
 ---
 
-Como muchos proyectos de software, el simulador M++ tiene una arquitectura modular:
+Como muchos proyectos de software, el simulador MS tiene una arquitectura modular:
 * Backend: módulo que se encarga de la lógica del simulador.
 * Frontend: módulo que se encarga de la [interfaz gráfica del simulador](https://es.wikipedia.org/wiki/Interfaz_gr%C3%A1fica_de_usuario).
 

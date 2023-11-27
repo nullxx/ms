@@ -9,13 +9,13 @@ import Solution from "../../../components/Solution";
 
 Función que modifica la dirección de retorno para se ejecute ella de nuevo.
 
-En este ejemplo se trata de hacer algo un poco más complejo jugando con los conocimientos de la M++.
+En este ejemplo se trata de hacer algo un poco más complejo jugando con los conocimientos de la MS.
 
 Como ya sabemos, cuando se llama a una función, la ejecución salta a la dirección de memoria
 de dicha función y se ejecuta hasta que se encuentra con la instrucción de retorno ([`RET`](/es/instructions/RET)).
 Es entonces cuando la ejecución vuelve a la siguiente dirección de memoria de la función que la llamó.
 
-Internamente la M++ guarda esta dirección de retorno en la pila (stack) al llamar a la función
+Internamente la MS guarda esta dirección de retorno en la pila (stack) al llamar a la función
 y la recupera para retornar.
 
 #### Pero... y si modifico la pila (stack) antes de retornar? 😈
@@ -46,10 +46,10 @@ void TFSUB() {
 }
 ```
 
-**(\*)** Esto en el codigo de la M++ no es tan literal, ya que en vez de comprobar si el registro RE es 0xFF,
+**(\*)** Esto en el codigo de la MS no es tan literal, ya que en vez de comprobar si el registro RE es 0xFF,
 comprobamos si está activado el flag de carry.
 
-El código en la M++ es:
+El código en la MS es:
 
 <Code
   testCodeText="Probar código"

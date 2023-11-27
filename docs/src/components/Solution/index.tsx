@@ -1,5 +1,5 @@
 import "./Solution.css";
-import * as React from "preact";
+import * as React from "react";
 import Code from "../Code/Code";
 
 export default function Solution({
@@ -13,7 +13,6 @@ export default function Solution({
 }) {
   if (sol.length === 0) return <p>No solution</p>;
 
-  return <p>hola</p>
   return (
     <div className="tab tabs">
       <input type="checkbox" id="chck1" />

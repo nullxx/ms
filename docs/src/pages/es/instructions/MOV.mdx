@@ -1,6 +1,6 @@
 ---
 title: MOV
-description: Mover valor de un registro a otro
+description: Mover valor en memoria
 layout: ../../../layouts/MainLayout.astro
 ---
 
@@ -8,21 +8,32 @@ import Code from "../../../components/Code/Code";
 import Solution from "../../../components/Solution";
 import states from "./states.json";
 
-Mover un valor de un registro a otro.
+Mover valor en memoria
 
 Existen diferentes caminos:
 
-### Mover un valor inmediato a un registro de propósito general
+### Mover un valor de un lugar de memoria a otro lugar de memoria (utilizando variables)
 
-\* Inmediato: un valor entero de 8 bits elegido por el usuario.
+Dado la siguiente sección de datos:
+<Code
+  code={`.data
+dw		dato 0
+dw		out 0`}
+  client:load
+/>
 
-Mover 0xF al registro de propósito general B.
+Podemos mover el valor de `dato` a `out` de la siguiente manera:
+
 
 <Code
-  code="MOV 0F, RB"
+  code={`.data
+dw		dato 0
+dw		out 0
+
+.code
+MOV dato, out`}
   testCodeText="Probar código"
   previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/MOV_0F_RB.mp4"
   client:load
 />
 
@@ -32,16 +43,41 @@ Mover 0xF al registro de propósito general B.
 | :----- | :-------------- |
 | S0     | {states.S0}     |
 | S1     | {states.S1}     |
-| S15    | {states.S15}    |
-| S39    | {states.S39}    |
+| S2    | {states.S2}    |
+| S10    | {states.S10}    |
 
-### Mover entre registros de propósito general
+### Mover un valor de un lugar de memoria a otro lugar de memoria (utilizando direcciones)
+
+Dado la siguiente sección de datos:
+<Code
+  code={`.data
+dw		dato 0xF
+dw		out 0`}
+  client:load
+/>
+
+Dado que al no especificar donde empezará la seccion de `.data` se empezará a asignar direcciones después de hacerlo con el código. Dado que el código ocupará un hueco de memoria (16 bits) + un hueco de separación (0x00), se empezará a asignar direcciones a partir de la dirección `0x02`, tal que:
+
+| Dirección | Valor |
+| :-------- | :---- |
+| 0x02    | dato  |
+| 0x03    | out   |
+
+Podemos mover el valor de `dato` a `out` de la siguiente manera:
 
 <Code
-  code="MOV RB, RC"
+  code={`.data
+dw		dato 0xF
+dw		out 0
+
+.fin end
+
+.code
+MOV 0x02, 0x03
+
+end:`}
   testCodeText="Probar código"
   previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/MOV_RB_RC.mp4"
   client:load
 />
 
@@ -51,54 +87,25 @@ Mover 0xF al registro de propósito general B.
 | :----- | :-------------- |
 | S0     | {states.S0}     |
 | S1     | {states.S1}     |
-| S2     | {states.S2}     |
-| S3     | {states.S3}     |
+| S2    | {states.S2}    |
+| S10    | {states.S10}    |
 
-### Mover entre un registro de propósito general al acumulador
-
-<Code
-  code="MOV RB, AC"
-  testCodeText="Probar código"
-  previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/MOV_RB_AC.mp4"
-  client:load
-/>
-
-#### Microprograma
-
-| ESTADO | MICRO-OPERACIÓN |
-| :----- | :-------------- |
-| S0     | {states.S0}     |
-| S1     | {states.S1}     |
-| S2     | {states.S2}     |
-| S4     | {states.S4}     |
-
-### Mover un valor inmediato al acumulador
-
-<Code
-  code="MOV 0F, AC"
-  testCodeText="Probar código"
-  previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/MOV_0F_AC.mp4"
-  client:load
-/>
-
-#### Microprograma
-
-| ESTADO | MICRO-OPERACIÓN |
-| :----- | :-------------- |
-| S0     | {states.S0}     |
-| S1     | {states.S1}     |
-| S15    | {states.S15}    |
-| S4     | {states.S4}     |
 
 ## Comprueba tus conocimientos
 
-Crea un programa que mueva un valor 0xA al registro RB y que posteriormente se mueva desde este último al acumulador
+Crea un programa que mueva el valor 0x0F a la dirección 0x50
 
 <Solution
   title="Solución"
-  sol={["MOV 0A, RB\nMOV RB, AC"]}
+  sol={[`.data 79 ; 0x4F (0x50 - 0x01)
+dw		dato 0x0F
+
+.fin end
+
+.code
+MOV dato, 0x50
+
+end:`]}
   testCodeText="Probar código"
-  client:load
+  client:only="react"
 />

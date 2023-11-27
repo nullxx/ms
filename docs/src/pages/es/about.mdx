@@ -1,22 +1,31 @@
 ---
-title: Sobre la M++
-description: Sobre la M++
+title: Sobre la MS
+description: Sobre la MS
 layout: ../../layouts/MainLayout.astro
 ---
 
 import states from "./instructions/states.json";
 
-## Direccionamiento
+## Tamaños
 
-Excluyendo el bus de direcciones, que es de 16 bits, el bus de datos es de 8 bits.
+| Componente | Tamaño |
+| --- | --- |
+| Bus de datos | 16 bits |
+| Bus de direcciones | 16 bits |
+| Bus de direcciones | 7 bits |
+| PC | 7 bits |
+| ALU REG. A | 16 bits |
+| ALU REG. B | 16 bits |
+| RI SRC | 7 bits |
+| RI DST | 7 bits |
+| RI COD. OP. | 2 bits |
 
 ## Registros
 
-La M++ tiene un total de 12 registros:
+La MS tiene un total de 12 registros:
 
-- Registros de propósito general: B, C, D, E
-- Registros de control y direccionamiento: H, L, SP, PC, RI
-- Registros auxiliares: 2OP, ACUMM
+- Registros de control y direccionamiento: PC, RI
+- Registros auxiliares de la ALU: A, B
 
 ## Estados
 
