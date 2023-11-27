@@ -33,9 +33,9 @@ jobs:
         working-directory: docs
         run: |
           if [ -f "package.json" ]; then
-            echo "::set-output name=manager::npm"
-            echo "::set-output name=command::ci"
-            echo "::set-output name=runner::npx --no-install"
+            echo "manager=npm"
+            echo "command=ci"
+            echo "runner=npx --no-install"
             exit 0
           else
             echo "Unable to determine packager manager"
