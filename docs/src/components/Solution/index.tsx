@@ -22,12 +22,12 @@ export default function Solution({
       <div className="tab-content">
         {sol.length > 1
           ? sol.map((sol, i) => (
-              <>
+              <div key={i}>
                 <span>
                   {title} {i + 1}
                 </span>
                 <Code code={sol} testCodeText={testCodeText} />
-              </>
+              </div>
             ))
           : <Code code={sol[0]} testCodeText={testCodeText} />}
       </div>
