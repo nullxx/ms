@@ -14,9 +14,9 @@ export const GITHUB_EDIT_URL = `https://github.com/nullxx/ms/tree/master/docs/`;
 // Uncomment this to enable site search.
 // See "Algolia" section of the README for more information.
 export const ALGOLIA = {
-  indexName: "ms",
-  appId: "4XDPZIOFPF",
-  apiKey: "e8db70aaba31745b2946a0ad7f32f6cf",
+  indexName: "ms-nullx",
+  appId: "TNNQ123F7B",
+  apiKey: "9d92ff47c36761a27f657d3d420612dc",
 };
 
 export const SIDEBAR = {
