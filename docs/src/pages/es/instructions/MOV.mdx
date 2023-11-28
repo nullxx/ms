@@ -26,7 +26,9 @@ Podemos mover el valor de `dato` a `out` de la siguiente manera:
 
 
 <Code
-  code={`.data
+  code={`.ver 1
+
+.data
 dw		dato 0
 dw		out 0
 
@@ -66,7 +68,9 @@ Dado que al no especificar donde empezará la seccion de `.data` se empezará a 
 Podemos mover el valor de `dato` a `out` de la siguiente manera:
 
 <Code
-  code={`.data
+  code={`.ver 1
+  
+.data
 dw		dato 0xF
 dw		out 0
 
@@ -97,7 +101,9 @@ Crea un programa que mueva el valor 0x0F a la dirección 0x50
 
 <Solution
   title="Solución"
-  sol={[`.data 79 ; 0x4F (0x50 - 0x01)
+  sol={[`.ver 1
+  
+.data 79 ; 0x4F (0x50 - 0x01)
 dw		dato 0x0F
 
 .fin end

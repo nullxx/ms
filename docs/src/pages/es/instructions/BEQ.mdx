@@ -5,25 +5,43 @@ layout: ../../../layouts/MainLayout.astro
 ---
 
 import Solution from "../../../components/Solution";
+import Code from "../../../components/Code/Code";
 import states from "./states.json";
 
 Salto condicional si FZ = 1.
 
-```
-BEQ DIR
-```
+## Sintaxis
 
-siendo `DIR` una dirección de memoria.
 
+<Code
+  code="BEQ <DIR>"
+  testCodeText="Probar código"
+  client:load
+/>
+
+siendo `DIR` una variable o dirección de memoria (0x00 - 0x7F).
+
+### Ejemplo
+<Code
+  code={`.ver 1
+
+.data
+
+.fin	lblend
+
+.code
+begin:  cmp 0xF, 0xE
+        beq begin ; no salta porque 0xF != 0xE
+
+lblend:`}
+/>
 #### Microprograma si FZ = 1
 
 | ESTADO | MICRO-OPERACIÓN |
 | :----- | :-------------- |
 | S0     | {states.S0}     |
 | S1     | {states.S1}     |
-| S16    | {states.S16}    |
-| S17    | {states.S17}    |
-| S20    | {states.S20}    |
+| S11    | {states.S11}    |
 
 #### Microprograma si FZ = 0
 
@@ -31,18 +49,28 @@ siendo `DIR` una dirección de memoria.
 | :----- | :-------------- |
 | S0     | {states.S0}     |
 | S1     | {states.S1}     |
-| S16    | {states.S16}    |
-| S17    | {states.S17}    |
 
 ## Comprueba tus conocimientos
 
-Crea un programa que haga un salto condicional `BEQ` a la dirección 0x100.
+Crea un programa que compare dos números y salte a una etiqueta si son iguales.
 
-**Nota**: debes conocer y utilizar la operación: [`MOV`](/es/instructions/MOV), [`CMP`](/es/instructions/CMP)
 
 <Solution
   title="Solución"
-  sol={["MOV 05, AC\nCMP 05\nBEQ 100"]}
+  sol={[`.ver 1
+
+.data
+dw num1 0x5
+dw num2 0x6
+
+.fin	lblend
+
+.code
+cmp num1, num2
+beq etiqueta
+
+etiqueta:
+lblend:`]}
   testCodeText="Probar código"
   client:load
 />

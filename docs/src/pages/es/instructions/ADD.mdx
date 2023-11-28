@@ -1,6 +1,6 @@
 ---
 title: ADD
-description: Sumar valores
+description: Sumar dos valores de memoria
 layout: ../../../layouts/MainLayout.astro
 ---
 
@@ -8,23 +8,51 @@ import Code from "../../../components/Code/Code";
 import Solution from "../../../components/Solution";
 import states from "./states.json";
 
-Sumar al acumulador un determinado valor.
-
-**El resultado se guarda en el acumulador**.
-
-```
-AC = AC + X
-```
-
-Siendo X el valor a sumar
-
-### Sumar un registro de propósito general al acumulador
+Sumar dos valores de memoria
+## Sintaxis
 
 <Code
-  code="ADD RB"
+  code={`MOV <SRC>, <DST>`}
   testCodeText="Probar código"
   previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/ADD_RB.mp4"
+  client:load
+/>
+
+pudiendo ser:
+- `SRC` una variable o una dirección de memoria (0x00 - 0x7F)
+- `DST` una variable o una dirección de memoria (0x00 - 0x7F)
+
+El resultado de la operación se almacena en la dirección de memoria de `DST`.
+
+### Sumar dos valores de memoria
+
+Dada la siguiente sección de datos:
+
+<Code
+  code={`.data
+dw		num1 10
+dw		num2 15`}
+  testCodeText="Probar código"
+  previewText="Vista previa"
+  client:load
+/>
+Procederemos a sumar los valores de las variables `num1` y `num2` y almacenar el resultado en la variable 
+
+<Code
+  code={`.ver 1
+
+.data
+dw		num1 10
+dw		num2 15
+
+.fin	lblend
+
+.code
+add num1, num2
+
+lblend:`}
+  testCodeText="Probar código"
+  previewText="Vista previa"
   client:load
 />
 
@@ -35,55 +63,64 @@ Siendo X el valor a sumar
 | S0     | {states.S0}     |
 | S1     | {states.S1}     |
 | S2     | {states.S2}     |
-| S5     | {states.S5}     |
+| S6     | {states.S6}     |
+| S7     | {states.S7}     |
 
-### Sumar un valor inmediato al acumulador
-
-<Code
-  code="ADD 0F"
-  testCodeText="Probar código"
-  previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/ADD_0F.mp4"
-  client:load
-/>
-
-#### Microprograma
-
-| ESTADO | MICRO-OPERACIÓN |
-| :----- | :-------------- |
-| S0     | {states.S0}     |
-| S1     | {states.S1}     |
-| S15    | {states.S15}    |
-| S5     | {states.S5}     |
-
-### Sumar un el acumulador al acumulador
+Lo mismo sería si en lugar de utilizar variables, utilizamos direcciones de memoria:
 
 <Code
-  code="ADD AC"
+  code={`.ver 1
+
+.data
+dw		num1 10
+dw		num2 15
+
+.fin	lblend
+
+.code
+add 0x2, 0x3
+
+lblend:`}
   testCodeText="Probar código"
   previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/ADD_AC.mp4"
   client:load
 />
-
-#### Microprograma
-
-| ESTADO | MICRO-OPERACIÓN |
-| :----- | :-------------- |
-| S0     | {states.S0}     |
-| S1     | {states.S1}     |
-| S12    | {states.S12}    |
-| S5     | {states.S5}     |
 
 ## Comprueba tus conocimientos
 
-Crea un programa que haga la siguiente operación: `AC = 0x5 + 0x2`
+Crea un programa que haga la siguiente operación: `RESULTADO = 0x5 + 0x2`
 
-**Nota**: debes conocer y utilizar la operación: [`MOV`](/es/instructions/MOV)
+**Nota**: debes conocer y utilizar (o no) la operación: [`MOV`](/es/instructions/MOV)
 
 <Solution
   title="Solución"
-  sol={["MOV 05, AC\nADD 02", "MOV 05, AC\nMOV 02, RB\nADD RB"]}
+  sol={[`.ver 1
+
+.data
+dw		num1 0x5
+dw		num2 0x2
+dw		resultado 0
+
+.fin	lblend
+
+.code
+add num1, num2
+mov num2, resultado
+
+lblend:`, `.ver 1
+
+.data
+dw		num1 0x5
+dw		resultado 0x2
+
+.fin	lblend
+
+.code
+add num1, resultado
+
+lblend:`]}
   testCodeText="Probar código"
   client:load
 />
+
+

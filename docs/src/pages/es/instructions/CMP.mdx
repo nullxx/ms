@@ -10,44 +10,41 @@ import states from "./states.json";
 
 Comparar dos valores.
 
-**El resultado se ve reflejado en los flags: ZERO (FZ) Y CARRY (FC)**
+**El resultado se ve reflejado en el flag: ZERO (FZ)**
 
-```
-RESULTADO = AC - X
-ZERO = 0
-CARRY = 0
-
-SI (RESULTADO == 0) {
-  ZERO = 1
-}
-SI (RESULTADO < 0) {
-  CARRY = 1
-}
-```
-
-Siendo X el valor a comparar
-
-Como se puede ver en el pseudo-código, para comparar un valor, se utiliza la resta.
-
-### Comprobar si el acumulador y otro registro de propósito general son iguales
-
-Serán iguales si el indicador del flag `ZERO` es 1.
-
+## Sintaxis
 <Code
-  code="CMP RB"
+  code="CMP <SRC>, <DST>"
   testCodeText="Probar código"
-  previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/CMP_RB.mp4"
   client:load
 />
 
-Su pseudo-código sería:
+pudiendo ser:
+- `SRC` una variable o una dirección de memoria (0x00 - 0x7F)
+- `DST` una variable o una dirección de memoria (0x00 - 0x7F)
 
-```
-SI ((AC - RB) == 0) {
-  ZERO = 1
-}
-```
+### Comprobar si dos valores son iguales
+
+Serán iguales si el indicador del flag `ZERO` es 1.
+
+Procederemos a comparar dos valores, uno almacenado en la variable `num1` y otro en la variable `num2`.
+
+<Code
+  code={`.ver 1
+
+.data
+dw		num1 0x5
+dw		num2 0x5
+
+.fin	lblend
+
+.code
+CMP num1, num2
+
+lblend:`}
+  testCodeText="Probar código"
+  client:load
+/>
 
 #### Microprograma
 
@@ -56,69 +53,27 @@ SI ((AC - RB) == 0) {
 | S0     | {states.S0}     |
 | S1     | {states.S1}     |
 | S2     | {states.S2}     |
-| S7     | {states.S7}     |
-
-### Comprobar si el acumulador y un valor inmediato son iguales
-
-Serán iguales si el indicador del flag `ZERO` es 1.
-
-<Code
-  code="CMP 0F"
-  testCodeText="Probar código"
-  previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/CMP_0F.mp4"
-  client:load
-/>
-
-Su pseudo-código sería:
-
-```
-SI ((AC - 0xF) == 0) {
-  ZERO = 1
-}
-```
-
-### Comprobar si el valor de un registro de propósito general es mayor que el acumulador
-
-`RB` será mayor que `AC` si el indicador del flag `CARRY` es 1.
-
-<Code
-  code="CMP RB"
-  testCodeText="Probar código"
-  previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/CMP_RB.mp4"
-  client:load
-/>
-
-Su pseudo-código sería:
-
-```
-SI ((AC - RB) < 0) {
-  CARRY = 1
-}
-```
-
-### Comprobar si el valor del acumulador es mayor que el de un registro de propósito general
-
-`AC` será mayor que `RB` si el indicador del flag `CARRY` es 0 y `ZERO` es 0.
-
-<Code
-  code="CMP RB"
-  testCodeText="Probar código"
-  previewText="Vista previa"
-  previewVideoSrc="/assets/video/preview/CMP_RB.mp4"
-  client:load
-/>
+| S6     | {states.S6}     |
+| S9     | {states.S9}     |
 
 ## Comprueba tus conocimientos
 
-Crea un programa que tenga como resultado: `ZERO = 1; CARRY = 0;`
-
-**Nota**: debes conocer y utilizar la operación: [`MOV`](/es/instructions/MOV)
+Crea un programa que tenga como resultado: `ZERO = 0;`
 
 <Solution
   title="Solución"
-  sol={["MOV 05, AC\nMOV 05, RB\nCMP RB", "MOV 05, AC\nCMP 05"]}
+  sol={[`.ver 1
+
+.data
+dw		num1 0x5
+dw		num2 0x6
+
+.fin	lblend
+
+.code
+CMP num1, num2
+
+lblend:`]}
   testCodeText="Probar código"
   client:load
 />
