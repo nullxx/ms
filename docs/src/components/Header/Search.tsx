@@ -9,10 +9,10 @@ import * as docSearchReact from '@docsearch/react';
 import { createPortal } from 'react-dom';
 
 export default function Search() {
-	const DocSearchModal = docSearchReact.DocSearchModal;
+	const DocSearchModal = docSearchReact.DocSearchModal || docSearchReact.default.DocSearchModal;
 
 	const useDocSearchKeyboardEvents =
-		docSearchReact.useDocSearchKeyboardEvents;
+		docSearchReact.useDocSearchKeyboardEvents || docSearchReact.default.useDocSearchKeyboardEvents;
 
 	const [isOpen, setIsOpen] = useState(false);
 	const searchButtonRef = useRef<HTMLButtonElement>(null);
