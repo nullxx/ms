@@ -1,23 +1,22 @@
-/* jsxImportSource: react */
+import React from 'react';
 import { useState, useCallback, useRef } from 'react';
 import * as CONFIG from '../../config';
 import '@docsearch/css/dist/style.css';
 import './Search.css';
 
-// @ts-ignore
+
 import * as docSearchReact from '@docsearch/react';
-// @ts-ignore
 import { createPortal } from 'react-dom';
 
 export default function Search() {
-	const DocSearchModal = docSearchReact.DocSearchModal || docSearchReact.default.DocSearchModal;
+	const DocSearchModal = docSearchReact.DocSearchModal;
 
 	const useDocSearchKeyboardEvents =
-		docSearchReact.useDocSearchKeyboardEvents || docSearchReact.default.useDocSearchKeyboardEvents;
+		docSearchReact.useDocSearchKeyboardEvents;
 
 	const [isOpen, setIsOpen] = useState(false);
-	const searchButtonRef = useRef();
-	const [initialQuery, setInitialQuery] = useState(null);
+	const searchButtonRef = useRef<HTMLButtonElement>(null);
+	const [initialQuery, setInitialQuery] = useState();
 
 	const onOpen = useCallback(() => {
 		setIsOpen(true);
