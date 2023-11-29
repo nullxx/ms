@@ -22,10 +22,12 @@ export const ALGOLIA = {
 export const SIDEBAR = {
   es: [
     { text: "", header: true },
-    { text: "Sobre ms", header: true },
     { text: "Introducción", link: "es/introduction" },
-    { text: "Arquitectura", link: "es/architecture" },
-    { text: "Detalles", link: "es/about" },
+    { text: "Sobre simulador MS", header: true },
+    { text: "Arquitectura del simulador", link: "es/architecture" },
+
+    { text: "Sobre la MS", header: true },
+    { text: "Descipción", link: "es/description" },
 
     { text: "COMPONENTES", header: true },
     { text: "Visión general", link: "es/components" },
@@ -35,6 +37,7 @@ export const SIDEBAR = {
     { text: "Depurador", link: "es/components/debugger" },
 
     { text: "PROGRAMACIÓN", header: true },
+    { text: "Sintaxis", link: "es/instructions/syntax" },
     { text: "Instrucciones soportadas", link: "es/instructions/instructions" },
     { text: "MOV", link: "es/instructions/MOV" },
     { text: "ADD", link: "es/instructions/ADD" },

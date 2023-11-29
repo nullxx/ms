@@ -1,0 +1,79 @@
+---
+title: Sintaxis
+description: Sintaxis
+layout: ../../../layouts/MainLayout.astro
+---
+import Code from "../../../components/Code/Code";
+
+La sintaxis general de los programas de la Máquina Sencilla está inspirada en la sintaxis de ensamblador. Estos disponen de difererentes secciones, cada una con un propósito específico.
+
+## Secciones
+Veamos el siguiente ejemplo:
+
+<Code
+  code={`.ver 1
+  
+.data 79
+dw      dato 0x00
+dw      const_1 0x01
+.fin end
+
+.code
+etiqueta: ADD const_1, dato
+          CMP 0x7F, 0x7F
+          BEQ etiqueta
+
+end:`}
+  testCodeText="Probar código"
+  client:load
+/>
+
+
+### Sección `.ver`
+
+Esta sección es opcional y se utiliza para indicar la **versión del lenguaje de programación**. En este caso de no especificarse, se asume que es la versión 1.
+
+<Code
+  code={`.ver <version>`}
+  client:load
+/>
+
+Versiones disponibles:
+
+| Versión | Descripción |
+| ---------  | --------- |
+| 1  | Versión inicial |
+
+### Sección `.data`
+
+Esta sección es opcional y se utiliza para **declarar variables**. 
+
+La sección `.data` puede estar (o no) seguida de una dirección de memoria en la que se almacenarán los datos declarados. En caso de no especificarse una dirección, el traspilador asigna automáticamente la siguiente dirección disponible tras la sección `.code` + 1.
+
+| Valor | Descripción |
+| ---------  | --------- |
+| 00 0000101 0000100 | `ADD const_1, dato` |
+| 01 1111111 1111111 | `CMP 0x7F, 0x7F` |
+| 11 0000000 0000000 | `BEQ etiqueta` |
+| 00 0000000 0000000 | `SEPARACIÓN CODE-DATA` |
+| 00 0000000 0000000 | `dato` |
+| 00 0000000 0000001 | `const_1` |
+
+Para declarar una variable, se utiliza la palabra reservada `dw` seguida del nombre de la variable y su valor. El valor puede ser un número hexadecimal (0x...) o decimal.
+
+<Code
+  code={`dw      <nombre variable> <valor>`}
+  client:load 
+/>
+
+### Sección `.code`
+
+Esta sección es obligatoria y se utiliza para **escribir el código** de la Máquina Sencilla.
+
+Se pueden utilizar etiquetas para marcar posiciones de memoria. Estas etiquetas se pueden referenciar a la hora de saltar a una posición de memoria.
+
+<Code
+  code={`etiqueta: <instrucción>
+          BEQ etiqueta`}
+  client:load 
+/>

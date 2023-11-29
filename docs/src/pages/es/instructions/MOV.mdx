@@ -10,6 +10,19 @@ import states from "./states.json";
 
 Mover valor en memoria
 
+## Sintaxis
+
+<Code
+  code={`MOV <SRC>, <DST>`}
+  testCodeText="Probar código"
+  previewText="Vista previa"
+  client:load
+/>
+
+pudiendo ser:
+- `SRC` una variable o una dirección de memoria (0x00 - 0x7F)
+- `DST` una variable o una dirección de memoria (0x00 - 0x7F)
+
 Existen diferentes caminos:
 
 ### Mover un valor de un lugar de memoria a otro lugar de memoria (utilizando variables)
@@ -35,7 +48,6 @@ dw		out 0
 .code
 MOV dato, out`}
   testCodeText="Probar código"
-  previewText="Vista previa"
   client:load
 />
 

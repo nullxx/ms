@@ -1,12 +1,13 @@
-import type { FunctionalComponent } from "preact";
-import { h, Fragment } from "preact";
-import { useState, useEffect, useRef } from "preact/hooks";
+import React, { FC, useState, useEffect, useRef } from "react";
 import type { MarkdownHeading } from "astro";
 
-const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
+const TableOfContents: FC<{ headings: MarkdownHeading[] }> = ({
   headings = [],
 }) => {
-  const itemOffsets = useRef([]);
+  const itemOffsets = useRef<{
+    id: string;
+    topOffset: number;
+  }[]>([]);
   const [activeId, setActiveId] = useState<string>();
   useEffect(() => {
     const getItemOffsets = () => {
@@ -30,9 +31,8 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
       <h2 className="heading">En esta página</h2>
       <ul>
         <li
-          className={`heading-link depth-2 ${
-            activeId === "overview" ? "active" : ""
-          }`.trim()}
+          className={`heading-link depth-2 ${activeId === "overview" ? "active" : ""
+            }`.trim()}
         >
           <a href="#overview">Vision general</a>
         </li>
@@ -40,9 +40,9 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
           .filter(({ depth }) => depth > 1 && depth < 4)
           .map((heading) => (
             <li
-              className={`heading-link depth-${heading.depth} ${
-                activeId === heading.slug ? "active" : ""
-              }`.trim()}
+              className={`heading-link depth-${heading.depth} ${activeId === heading.slug ? "active" : ""
+                }`.trim()}
+                key={heading.slug + heading.depth}
             >
               <a href={`#${heading.slug}`}>{heading.text}</a>
             </li>

@@ -1,0 +1,100 @@
+---
+title: Descripción
+description: Descripción de la máquina sencilla
+layout: ../../layouts/MainLayout.astro
+---
+
+## Arquitectura
+
+La arquitecura de la Máquina Sencilla es <a href="https://es.wikipedia.org/wiki/Arquitectura_de_Von_Neumann" target="_blank">Von Neumann</a>, es decir, el programa y los datos se almacenan en la misma memoria.
+
+
+import states from "./instructions/states.json";
+import signals from "./instructions/signals.json";
+
+## Tamaños
+
+| Componente | Tamaño |
+| --- | --- |
+| Bus de datos | 16 bits |
+| Bus de direcciones | 7 bits |
+| PC | 7 bits |
+| ALU REG. A | 16 bits |
+| ALU REG. B | 16 bits |
+| RI SRC | 7 bits |
+| RI DST | 7 bits |
+| RI COD. OP. | 2 bits |
+
+## Registros
+
+La MS tiene un total de 12 registros:
+
+- Registros de control y direccionamiento: PC, RI
+- Registros auxiliares de la ALU: A, B
+
+## Instrucciones
+Cuatro instrucciones:
+* [MOV](/es/instructions/MOV)
+* [ADD](/es/instructions/ADD)
+* [CMP](/es/instructions/CMP)
+* [BEQ](/es/instructions/BEQ)
+
+### Formato
+
+Cada instrucción está formada por 16 bits, divididos en 3 partes:
+- **Código de operación** (2 bits) --> OP
+- **Dirección fuente** (7 bits) --> SRC
+- **Dirección destino/(fuente)** (7 bits) --> DST/(SRC)
+
+Dependiendo de la instrucción que sea, el formato de la misma será diferente:
+
+| Instrucción | Formato |
+| --- | --- |
+| MOV | OP SRC DST |
+| ADD | OP SRC DST |
+| CMP | OP SRC DST |
+| BEQ | OP DST/(SRC) |
+
+
+## Estados
+
+<table>
+  <thead>
+    <tr>
+      <th>ESTADO</th>
+      <th>MICRO-OPERACIÓN</th>
+      <th>MPX1</th>
+      <th>MPX0</th>
+      <th>ALU1</th>
+      <th>ALU0</th>
+      <th>W/R</th>
+      <th>CPC</th>
+      <th>CRI</th>
+      <th>CA</th>
+      <th>CB</th>
+      <th>FZ</th>
+    </tr>
+  </thead>
+  <tbody>
+    {Object.keys(states).map((key) => (
+      <tr>
+        <td>{key}</td>
+        <td>{states[key]}</td>
+        <td style="text-align: center;">{signals[key]?.[0]}</td>
+        <td style="text-align: center;">{signals[key]?.[1]}</td>
+        <td style="text-align: center;">{signals[key]?.[2]}</td>
+        <td style="text-align: center;">{signals[key]?.[3]}</td>
+        <td style="text-align: center;">{signals[key]?.[4]}</td>
+        <td style="text-align: center;">{signals[key]?.[5]}</td>
+        <td style="text-align: center;">{signals[key]?.[6]}</td>
+        <td style="text-align: center;">{signals[key]?.[7]}</td>
+        <td style="text-align: center;">{signals[key]?.[8]}</td>
+        <td style="text-align: center;">{signals[key]?.[9]}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+### Diagrama de estados
+
+<img style="background-color: white;" src="/assets/state-diagram.svg"></img>

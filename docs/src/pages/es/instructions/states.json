@@ -6,6 +6,5 @@
   "S7": "(D) ᐊ A + B; load FZ",
   "S9": "A ⨁ B load FZ",
   "S10": "(D) ᐊ B",
-  "S11": "if FZ = 1; RI ᐊ (D); PC ᐊ D + 1",
-  "S5": "(D) ᐊ A + B; load FZ"
+  "S11": "if FZ = 1; RI ᐊ (D); PC ᐊ D + 1"
 }
