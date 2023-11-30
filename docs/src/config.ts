@@ -27,7 +27,7 @@ export const SIDEBAR = {
     { text: "Arquitectura del simulador", link: "es/architecture" },
 
     { text: "Sobre la MS", header: true },
-    { text: "Descipción", link: "es/description" },
+    { text: "Descripción", link: "es/description" },
 
     { text: "COMPONENTES", header: true },
     { text: "Visión general", link: "es/components" },
