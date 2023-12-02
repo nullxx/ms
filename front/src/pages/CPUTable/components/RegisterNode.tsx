@@ -98,5 +98,5 @@ export default memo(({ data, id }: any) => {
     </div>
   );
 }, (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) && prevProps.id === nextProps.id;
 });

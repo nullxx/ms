@@ -1,0 +1,364 @@
+---
+title: Ejercicios
+description: Ejercicios de la MS
+layout: ../../../layouts/MainLayout.astro
+---
+
+import Code from "../../../components/Code/Code";
+import Solution from "../../../components/Solution";
+
+## Ejercicio 1
+
+Después de ejecutar el siguiente programa en la MS:
+
+<Code
+    code={`MOV 0x12, 0x13
+MOV 0x13, 0x14
+ADD 0x15, 0x13`}
+ client:load
+ />
+
+a) ¿Cuál es el contenido de las posiciones de la siguiente figura?
+
+| Dirección | Contenido |
+| --------- | --------- |
+| 12        | 00000000 11111111 |
+| 13        | 11111111 00000000 |
+| 14        | 10101010 10101010 |
+| 15        | 01010101 01010101 |
+
+<Solution
+  title="Solución"
+  
+  testCodeText="Probar código"
+  client:load
+>
+<>
+<p>12 = 0x00FF</p>
+<p>13 = 0x5654</p>
+<p>14 = 0x00FF</p>
+<p>15 = 0x5555</p>
+</>
+</Solution>
+
+b) ¿Cuál es el valor de FZ?
+
+| Dirección | Contenido |
+| --------- | --------- |
+| 12        | 00000000 11111111 |
+| 13        | 11111111 00000000 |
+| 14        | 10101010 10101010 |
+| 15        | 01010101 01010101 |
+
+<Solution
+  title="Solución"
+  
+  testCodeText="Probar código"
+  client:load
+>
+<>
+<p>FZ = 0x0</p>
+</>
+</Solution>
+
+---
+## Ejercicio 2
+
+Sabiendo que los contenidos en la figura se obtienen después de haber ejecutado el programa en la MS:
+
+| Dirección | Contenido |
+| --------- | --------- |
+| 36        | 00000000 11111111 |
+| 37        | 00000000 11111111 |
+| 38        | 11111111 11111111 |
+| 39        | 11111111 11111111 |
+| 3A        | 00000000 11111111 |
+
+<Code
+    code={`MOV 0x36, 0x37
+ADD 0x37, 0x38
+MOV 0x38,0x39
+CMP 0x39, 0x3A`}
+ client:load
+ />
+
+
+a) Averiguar el valor inicial que tenía la posición 38 antes de ejecutar el programa.
+
+<Solution
+  title="Solución"
+  
+  testCodeText="Probar código"
+  client:load
+>
+<>
+<p>38 = 0xFF00</p>
+</>
+</Solution>
+
+b) ¿Cuál es el valor de FZ tras la ejecución del programa?
+
+<Solution
+  title="Solución"
+  
+  testCodeText="Probar código"
+  client:load
+>
+<>
+<p>FZ = 0x0</p>
+</>
+</Solution>
+---
+## Ejercicio 3
+
+Se pide un programa en lenguaje ensamblador de la MS para realizar una multiplicación, sabiendo que el multiplicando (a) está depositado en la posición 100 de memoria y el multiplicador (b) está en la 101. El resultado (c) debe guardarse en la posición 102 de la memoria
+
+- El programa va a requerir un contador (i) que lleve la cuenta del número de veces que se va sumando el multiplicando. Para este fin se destina la posición de memoria 103, que inicialmente tendrá un 0.
+
+- El programa necesitará la participación de dos constantes, que también se depositan en dos direcciones de memoria. Así, en la dirección 104 hay almacenado un 1 y en la dirección 105 un 0.
+
+<Solution
+  title="Solución"
+  client:load
+>
+<>
+  <ul>
+    <li>Se hará sumando el multiplicando consigo mismo tantas veces como diga el multiplicador</li>
+    <li>Se inicializan a 0 tanto el contador como el resultado acumulado</li>
+    <li>El programa consistirá en un bucle que se repite mientras no se acabe el proceso</li>
+    <li>El bucle suma el multiplicando al resultado parcial y lo almacena en el mismo lugar</li>
+    <li>Utiliza instrucciones de comparación y correspondiente salto para tomar las decisiones</li>
+    <li>Como no tiene salto incondicional, realiza en su lugar un salto si se cumple una condición obvia</li>
+  </ul>
+  <table>
+<thead>
+<tr>
+<th>Dirección</th>
+<th>Etiqueta</th>
+<th>Nemónico</th>
+<th>Fuente</th>
+<th>Destino</th>
+<th>Comentarios</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>begin</td>
+<td>MOV</td>
+<td>105</td>
+<td>102</td>
+<td>c = 0</td>
+</tr>
+<tr>
+<td>1</td>
+<td></td>
+<td>MOV</td>
+<td>105</td>
+<td>103</td>
+<td>i = 0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>while</td>
+<td>CMP</td>
+<td>103</td>
+<td>101</td>
+<td>mientras i &lt; b</td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td>BEQ</td>
+<td>8</td>
+<td>8</td>
+<td>si FZ = 1, PC = 8</td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td>ADD</td>
+<td>100</td>
+<td>102</td>
+<td>c = c + a</td>
+</tr>
+<tr>
+<td>5</td>
+<td></td>
+<td>ADD</td>
+<td>104</td>
+<td>103</td>
+<td>i = i + 1</td>
+</tr>
+<tr>
+<td>6</td>
+<td></td>
+<td>CMP</td>
+<td>50</td>
+<td>50</td>
+<td>siempre FZ = 1</td>
+</tr>
+<tr>
+<td>7</td>
+<td></td>
+<td>BEQ</td>
+<td>2</td>
+<td>2</td>
+<td>salto a PC = 2</td>
+</tr>
+<tr>
+<td>8</td>
+<td>end</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</>
+</Solution>
+
+
+---
+## Ejercicio 4
+
+Obtener los formatos binarios que corresponden a las instrucciones del siguiente programa de la MS.
+
+| COP | Fuente | Destino |
+| --------- | --------- | --------- |
+| 01        | 1101001 | 1101010 |
+| 10        | 1101010 | 1101011 |
+| 11        | XXXXXXX | 1100100 |
+
+<Code
+    code={`MOV 0x105, 0x106
+CMP 0x106, 0x107
+BEQ 0x100
+`}
+ client:load
+ />
+
+<Solution
+  title="Solución"
+  client:load
+>
+<>
+<table>
+<thead>
+<tr>
+<th>COP</th>
+<th>Fuente</th>
+<th>Destino</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>1101001</td>
+<td>1101010</td>
+</tr>
+<tr>
+<td>10</td>
+<td>1101010</td>
+<td>1101011</td>
+</tr>
+<tr>
+<td>11</td>
+<td>XXXXXXX</td>
+<td>1100100</td>
+</tr>
+</tbody>
+</table>
+
+</>
+</Solution>
+
+---
+
+## Ejercicio 5
+
+El formato de instrucciones de un computado tiene 3 campos: COP, Fuente, destino. El computador dispone de un banco de registros con 8 registros (R0...R7) de 8 bits cada uno. Si inicialmente los registros están cargados con el valor 0000 0010.
+
+a) Calcular el contenido de los mismos después de ejecutar el siguiente programa, en el cual el código de operación se expresa con nemónicos y operandos por el nombre de los registros, pues sólo se dispone del modo de direccionamiento por registro.
+
+<Code
+    code={`ADD R2, R3
+ADD R0, R1
+SUB R4, R5
+NOT R6
+XOR R5, R7`}
+ client:load
+ />
+
+<Solution
+  title="Solución"
+  client:load
+>
+<p>R0 = R2 = R4 = R7 = 0000 0010</p>
+<p>R1 = 0000 0100</p>
+<p>R3 = 0000 0100</p>
+<p>R5 = 0000 0000</p>
+<p>R6 = 1111 1101</p>
+</Solution>
+
+b) Confeccionar un programa para que el computador del ejemplo anterior, partiendo del mismo estado inicial de sus 8 registros, es decir, que contengan el valor 0000 0010, pasen a contener el valor 0000 0000, después de ejecutar el programa pedido
+
+<Solution
+  title="Solución"
+  client:load
+>
+  <table>
+    <tr>
+        <th>Nemónico</th>
+        <th>Operandos (F,D)</th>
+        <th>Comentarios</th>
+    </tr>
+    <tr>
+        <td>SUB</td>
+        <td>R1, R0</td>
+        <td>R0 = 0000 0000</td>
+    </tr>
+    <tr>
+        <td>AND</td>
+        <td>R0, R1</td>
+        <td>R1 = 0000 0000</td>
+    </tr>
+    <tr>
+        <td>AND</td>
+        <td>R0, R2</td>
+        <td>R2 = 0000 0000</td>
+    </tr>
+    <tr>
+        <td>AND</td>
+        <td>R0, R3</td>
+        <td>R3 = 0000 0000</td>
+    </tr>
+    <tr>
+        <td>AND</td>
+        <td>R0, R4</td>
+        <td>R4 = 0000 0000</td>
+    </tr>
+    <tr>
+        <td>AND</td>
+        <td>R0, R5</td>
+        <td>R5 = 0000 0000</td>
+    </tr>
+    <tr>
+        <td>AND</td>
+        <td>R0, R6</td>
+        <td>R6 = 0000 0000</td>
+    </tr>
+    <tr>
+        <td>AND</td>
+        <td>R0, R7</td>
+        <td>R6 = 0000 0000</td>
+    </tr>
+</table>
+</Solution>
+
+---
+
+Los ejercicios han sido extraidos del siguiente recurso:
+- [Cursos la red](https://cursoslared.com/recursoslibre/msencilla.pdf)

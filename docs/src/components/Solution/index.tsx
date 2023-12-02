@@ -6,17 +6,22 @@ export default function Solution({
   title = "Solution",
   sol = [],
   testCodeText = "Test code",
+  solutionIsCode = true,
+  children,
 }: {
   title?: string;
-  sol?: string[];
+  sol?: (string)[];
   testCodeText?: string;
+  solutionIsCode?: boolean;
+  children?: React.ReactNode;
+
 }) {
-  if (sol.length === 0) return <p>No solution</p>;
+  const id = Math.random().toString(36).substring(7);
 
   return (
     <div className="tab tabs">
-      <input type="checkbox" id="chck1" />
-      <label className="tab-label" htmlFor="chck1">
+      <input type="checkbox" id={id} />
+      <label className="tab-label" htmlFor={id}>
         {title}
       </label>
       <div className="tab-content">
@@ -26,10 +31,16 @@ export default function Solution({
                 <span>
                   {title} {i + 1}
                 </span>
-                <Code code={sol} testCodeText={testCodeText} />
+                {(solutionIsCode && typeof sol === 'string') && <Code code={sol} testCodeText={testCodeText} />}
+                {children}
               </div>
             ))
-          : <Code code={sol[0]} testCodeText={testCodeText} />}
+          : (
+              <div>
+                {solutionIsCode  && typeof sol === 'string' && <Code code={sol[0]} testCodeText={testCodeText} />}
+                {children}
+              </div>
+          )}
       </div>
     </div>
   );

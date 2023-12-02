@@ -8,7 +8,7 @@ layout: ../../layouts/MainLayout.astro
 
 MS es un computador elemental con fines exclusivamente didácticos por los profesores Miguel Valero y Eduard Ayquadé de la Universidad Politécnica de Cataluña
 
-Esta máquina se estudia en la asignatura Introducción a Computadores en ingeniería informática de la [Universidad de Deusto](https://deusto.es). En ella se aprenden conceptos básicos y fundamentales del funcionamiento de un computador.
+Esta máquina se estudia en la asignatura Introducción a Computadores en Ingeniería Informática de la [Universidad de Deusto](https://deusto.es). En ella se aprenden conceptos básicos y fundamentales del funcionamiento de un computador.
 
 En la parte de prácticas se utliza la MS para resolver diferentes problemas con el objetivo de aprender a [microprogramar](https://es.wikipedia.org/wiki/Microc%C3%B3digo).
 

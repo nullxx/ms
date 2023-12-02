@@ -43,7 +43,9 @@ export const SIDEBAR = {
     { text: "ADD", link: "es/instructions/ADD" },
     { text: "CMP", link: "es/instructions/CMP" },
     { text: "BEQ", link: "es/instructions/BEQ" },
-
+    
+    { text: "Ejercicios", header: true },
+    { text: "Ejercicios", link: "es/exercises/main" },
     // { text: "Ejemplos", header: true },
     // { text: "Multiplicación", link: "es/examples/multiplication" },
     // { text: "Factorial", link: "es/examples/factorial" },

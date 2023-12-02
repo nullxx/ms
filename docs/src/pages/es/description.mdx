@@ -42,18 +42,65 @@ Cuatro instrucciones:
 ### Formato
 
 Cada instrucción está formada por 16 bits, divididos en 3 partes:
-- **Código de operación** (2 bits) --> OP
+- **Código de operación** (2 bits) --> COP
 - **Dirección fuente** (7 bits) --> SRC
 - **Dirección destino/(fuente)** (7 bits) --> DST/(SRC)
+
+<table border="1">
+    <tr>
+      <td>B15</td>
+      <td>B14</td>
+      <td>B13</td>
+      <td>B12</td>
+      <td>B11</td>
+      <td>B10</td>
+      <td>B9</td>
+      <td>B8</td>
+      <td>B7</td>
+      <td>B6</td>
+      <td>B5</td>
+      <td>B4</td>
+      <td>B3</td>
+      <td>B2</td>
+      <td>B1</td>
+      <td>B0</td>
+    </tr>
+
+    <tr>
+      <th colspan="2">Código de Operación</th>
+      <th colspan="7">Dirección Fuente</th>
+      <th colspan="7">Dirección Destino (y Fuente)</th>
+    </tr>
+
+
+    <tr>
+      <td>COP1</td>
+      <td>COP0</td>
+      <td>F6</td>
+      <td>F5</td>
+      <td>F4</td>
+      <td>F3</td>
+      <td>F2</td>
+      <td>F1</td>
+      <td>F0</td>
+      <td>D6</td>
+      <td>D5</td>
+      <td>D4</td>
+      <td>D3</td>
+      <td>D2</td>
+      <td>D1</td>
+      <td>D0</td>
+    </tr>
+</table>
 
 Dependiendo de la instrucción que sea, el formato de la misma será diferente:
 
 | Instrucción | Formato |
 | --- | --- |
-| MOV | OP SRC DST |
-| ADD | OP SRC DST |
-| CMP | OP SRC DST |
-| BEQ | OP DST/(SRC) |
+| MOV | COP SRC DST |
+| ADD | COP SRC DST |
+| CMP | COP SRC DST |
+| BEQ | COP DST/(SRC) |
 
 
 ## Estados

@@ -69,7 +69,7 @@ export default function Code({
 
   return (
     <pre
-      className="shiki github-dark"
+      className="shiki github-dark codede"
       style={{ backgroundColor: bgColor ?? "#0d1117", color: "#c9d1d9", overflow: 'scroll' }}
       ref={ref}
     >
