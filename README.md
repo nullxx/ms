@@ -16,7 +16,6 @@
 ![demo_board](demo/demo_board.png)
 ![demo_info](demo/demo_info.png)
 ![demo_coder](demo/demo_coder.png)
-![demo_running](demo/demo_running.png)
 
 ## Author
 
