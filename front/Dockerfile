@@ -5,7 +5,7 @@ RUN make
 
 FROM node:alpine AS install-deps
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY front/package.json front/yarn.lock ./
 RUN yarn
 
 FROM node:alpine AS build
