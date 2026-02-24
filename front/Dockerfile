@@ -1,21 +1,19 @@
-FROM bash:alpine3.12
-RUN test -f src/lib/core/files/*.wasm || exit 1
-RUN test -f src/lib/core/files/*.js || exit 1
+FROM emscripten/emsdk:latest AS core-build
+WORKDIR /cpu
+COPY ../cpu .   # El contexto de build debe ser la raíz del repo
+RUN make
 
 FROM node:alpine AS install-deps
-
 WORKDIR /app
-COPY package.json package.json
-COPY yarn.lock yarn.lock
+COPY package.json yarn.lock ./
 RUN yarn
 
 FROM node:alpine AS build
-
 ENV GENERATE_SOURCEMAP=false
-
 WORKDIR /app
-
 COPY . .
+COPY --from=core-build /cpu/output/libMaquinaSencilla.wasm ./src/lib/core/files/
+COPY --from=core-build /cpu/output/libMaquinaSencilla.js ./src/lib/core/files/
 COPY --from=install-deps /app/node_modules /app/node_modules
 RUN yarn build
 
