@@ -17,6 +17,6 @@ COPY --from=core-build /cpu/output/libMaquinaSencilla.js ./src/lib/core/files/
 COPY --from=install-deps /app/node_modules /app/node_modules
 RUN yarn build
 
-FROM nginx:latest
+FROM nginxinc/nginx-unprivileged:alpine
 COPY front/deploy/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
