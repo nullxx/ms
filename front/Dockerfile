@@ -1,6 +1,6 @@
 FROM emscripten/emsdk:latest AS core-build
 WORKDIR /cpu
-COPY ../cpu .   # El contexto de build debe ser la raíz del repo
+COPY cpu /cpu
 RUN make
 
 FROM node:alpine AS install-deps
