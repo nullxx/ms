@@ -101,7 +101,7 @@ export default function CodeEditor({
         isWholeLine: true,
         glyphMarginClassName: decorator.gyrphMarginClassName ?? decorator.type,
         ...(decorator.hoverMessage ? { hoverMessage: { value: decorator.hoverMessage } } : {}),
-        ...{ className: decorator.className } ?? {},
+        ...(decorator.className ? { className: decorator.className } : {}),
       },
     }]);
     if (!r) return;
@@ -174,7 +174,7 @@ export default function CodeEditor({
         handleDownloadCode();
       }
     });
-    
+
     // on open
     const disposable3 = editor?.onKeyDown((e) => {
       if ((e.ctrlKey && e.code === 'KeyO') || (e.metaKey && e.code === 'KeyO')) {
