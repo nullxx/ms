@@ -11,7 +11,7 @@ RUN yarn
 FROM node:alpine AS build
 ENV GENERATE_SOURCEMAP=false
 WORKDIR /app
-COPY . .
+COPY front/. .
 COPY --from=core-build /cpu/output/libMaquinaSencilla.wasm ./src/lib/core/files/
 COPY --from=core-build /cpu/output/libMaquinaSencilla.js ./src/lib/core/files/
 COPY --from=install-deps /app/node_modules /app/node_modules
