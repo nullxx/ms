@@ -1,14 +1,16 @@
+ARG NODE_BUILD_IMAGE=docker.io/library/node:24.22.3-alpine@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5
+
 FROM emscripten/emsdk:latest AS core-build
 WORKDIR /cpu
 COPY cpu /cpu
 RUN make
 
-FROM node:alpine AS install-deps
+FROM ${NODE_BUILD_IMAGE} AS install-deps
 WORKDIR /app
 COPY front/package.json front/yarn.lock ./
 RUN yarn
 
-FROM node:alpine AS build
+FROM ${NODE_BUILD_IMAGE} AS build
 ENV GENERATE_SOURCEMAP=false
 WORKDIR /app
 COPY front/. .
